@@ -18,10 +18,10 @@ public class UIScrupt : MonoBehaviour
 	
 	// Start Game
 	void Update () 
-	{
-		if (Input.GetButtonDown("Jump"))
+	{                                       // deny the player from spamming Spacebar
+		if (Input.GetButtonDown("Jump") && !gridMakerScript.InitializationStarted)
 		{
-			GridScript.gameBegin();
+			GridScript.GameBegin();
 			Invoke("DropDestroyUI", 2);
 		}
 	}
