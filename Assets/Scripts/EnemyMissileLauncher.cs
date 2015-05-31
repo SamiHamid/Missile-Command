@@ -23,18 +23,65 @@ public class EnemyMissileLauncher : MonoBehaviour {
 
     void FixedUpdate()
     {
-    
         if (gridMakerScript.GameStarted && Time.time >= _shootingTime) 
         {
-            StartCoroutine(SimulateProjectile());
+            //StartCoroutine(SimulateProjectile());
+            LaunchMissile();
 
             _shootingTime = Time.time + _shootingPeriod;
             
         }
     }
-   
 
+    // Following function calculates the initial velocity required
+    // for a trajectory motion. Inputs: Angle, position and target.
+    // Given the inputs, script calculates the initial velocity
+    // and adds the velocity to the rigidbody
+    void LaunchMissile()
+    {
+        // place the cannon into a random space in determined area
+        Vector3 _cannonPosition = new Vector3(Random.Range(_cannon.XMin, _cannon.XMax), _cannon.Y, Random.Range(_cannon.ZMin, _cannon.ZMax));
+        transform.position = _cannonPosition;
 
+        // Determine a random target in the game field
+        Vector3 _targetPosition = new Vector3(Random.Range(_target.XMin, _target.XMax), _target.Y, Random.Range(_target.ZMin, _target.ZMax));
+        _target.BullsEyeTf.position = _targetPosition + new Vector3(0f, .1f, 0f);
+
+        // Calculate the distance between the cannon and the target
+        float dist = Vector3.Distance(_targetPosition, _cannonPosition);
+
+        // find the plane angle
+        float planeAngle;
+        Vector3 from = _targetPosition - _cannonPosition;
+        Vector3 to = transform.right;
+
+        // angle returns the absolute value only [0-180]
+        planeAngle = Vector3.Angle(from, to);
+
+        // use cross product to find real value [-180 - +180]
+        Vector3 cross = Vector3.Cross(from, to);
+        if (cross.y < 0) planeAngle = -planeAngle;
+
+        // Instantiate a projectile (missile) TODO: FIX ROTATION
+        float _firingAngle = Random.Range(_projectilePhysics.FiringAngleMin, _projectilePhysics.FiringAngleMax);
+        GameObject missile = Instantiate(_projectile, transform.position, Quaternion.Euler(new Vector3(-_firingAngle, 0f, planeAngle))) as GameObject;
+        missile.transform.parent = _missileContainer;   // stack missiles under launcher object
+
+       
+
+        // calculate initival velocity required to land the missile on target
+        float Vi;
+        Vi = Mathf.Sqrt(dist * 9.8f / (Mathf.Sin(Mathf.Deg2Rad * _firingAngle * 2)));
+        float Vx, Vy, Vz;   // x,y,z components of the initial velocity
+
+        Vx = Vi * Mathf.Cos(Mathf.Deg2Rad * _firingAngle) * Mathf.Cos(planeAngle * Mathf.Deg2Rad);
+        Vy = Vi * Mathf.Sin(Mathf.Deg2Rad * _firingAngle);
+        Vz = Vi * Mathf.Cos(Mathf.Deg2Rad * _firingAngle) * Mathf.Sin(planeAngle * Mathf.Deg2Rad);
+
+        missile.GetComponent<Rigidbody>().velocity = new Vector3(Vx, Vy, Vz);
+    }
+
+    // TODO: remove this segment if the physics based solution above works
     IEnumerator SimulateProjectile()
     {
         // place the cannon into a random space in determined area
