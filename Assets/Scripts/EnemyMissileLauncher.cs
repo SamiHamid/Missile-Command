@@ -37,11 +37,11 @@ public class EnemyMissileLauncher : MonoBehaviour {
 
     IEnumerator SimulateProjectile()
     {
-        // translate the cannon into a random space in determined area
+        // place the cannon into a random space in determined area
         Vector3 _cannonPosition = new Vector3(Random.Range(_cannon.XMin, _cannon.XMax), _cannon.Y, Random.Range(_cannon.ZMin, _cannon.ZMax));
         transform.position = _cannonPosition;
 
-        // Determine a random target 
+        // Determine a random target in the game field
         Vector3 _targetPosition = new Vector3(Random.Range(_target.XMin, _target.XMax), _target.Y, Random.Range(_target.ZMin, _target.ZMax));
         _target.BullsEyeTf.position = _targetPosition + new Vector3(0f, .1f, 0f);
 
@@ -90,6 +90,7 @@ public class EnemyMissileLauncher : MonoBehaviour {
 [Serializable]
 public class ProjectilePhysics
 {
+    // a class for grouping the related variables under one dropdown in the editor
     [SerializeField] private float _firingAngleMin;
     [SerializeField] private float _firingAngleMax;
     [SerializeField] private float _gravity;
@@ -113,10 +114,24 @@ public class ProjectilePhysics
 [Serializable]
 public class CannonPlacement
 {
-   
+    // drag and drop a plane, so that the coordinates (XMin/Max, ZMin/Max)
+    // will be returned back as a point on that plane
     [SerializeField] private Transform _cannonPlaneTf;
 
+    // if the scale of an axis of a plane is 1, then the plane's length of the corresponding
+    // axis is 10. To get the half of it from its middle point (plane.position.x)
+    // we need to multiply its scale of that dimension by 5 to get the edge of that axis
+    // hence 5 * plane.localScale.x
 
+    //           PLANE : Scale=1
+    //      =====================
+    //      |                   |
+    //      |          <---5--->|   _cannonPlaneTf.position.x + 5*_cannonPlaneTf.localScale.x;
+    //      |         x         |   _cannonPlaneTf.position.x
+    //      |<---5--->          |   _cannonPlaneTf.position.x - 5*_cannonPlaneTf.localScale.x;
+    //      |                   |
+    //      =====================
+    //      <-------- 10 ------->
     public float XMin
     {
         get
@@ -161,7 +176,7 @@ public class CannonPlacement
 [Serializable]
 public class TargetPlacement
 {
-
+    // see the comments on CannonPlacement class for explanation
     [SerializeField] private Transform _gamePlaneTf;
 
     [SerializeField] private Transform _bullsEyeTf;

@@ -9,11 +9,13 @@ public class gridMakerScript : MonoBehaviour
                                                         // otherwise player can spam "Spacebar" and instantiate multiple lines
 	// Field Bars
 	public GameObject FieldBar;
-	public Transform StartingPosition;
-	public float StartDistance;
 	public int NumberOfLines;
-	public float LineSpacing;
-	public float WaitLength;
+    public float WaitLength;
+
+    public Transform GameFieldPlane;
+
+    private Vector3 _startingPosition;
+    private float _lineSpacing;
 	
 	//Background
 	public GameObject Background;
@@ -21,6 +23,8 @@ public class gridMakerScript : MonoBehaviour
 	
 	void Start ()
 	{
+	    _startingPosition = GameFieldPlane.position - new Vector3(0, 0, 5 * GameFieldPlane.localScale.z);
+	    _lineSpacing = GameFieldPlane.localScale.z*10/NumberOfLines;
 	}
 	
 	
@@ -36,8 +40,9 @@ public class gridMakerScript : MonoBehaviour
 	{
 		for (int i=0; i<NumberOfLines; i++)
 		{
-			float zLoc = StartingPosition.position.z + i * LineSpacing;     // adjust Z value
-			GameObject instance = Instantiate(FieldBar, new Vector3 (0, 1, zLoc), StartingPosition.rotation) as GameObject;
+            float zLoc = _startingPosition.z + i * _lineSpacing;     // Adjust Z for spacing on each iteration
+			GameObject instance = Instantiate(FieldBar, new Vector3 (0, 0.2f, zLoc), Quaternion.Euler(new Vector3(0, 0, 90))) as GameObject;
+
             if (instance != null) instance.transform.parent = transform;    // move instantiated objects under the gridMaker object
 
             GetComponent<AudioSource>().Play();
