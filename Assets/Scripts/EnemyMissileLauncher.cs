@@ -15,21 +15,14 @@ public class EnemyMissileLauncher : MonoBehaviour {
 
     private float _shootingTime;
 
-    void Start()
-    {
-		
-    }
- 
-
     void FixedUpdate()
     {
         if (gridMakerScript.GameStarted && Time.time >= _shootingTime) 
         {
-            //StartCoroutine(SimulateProjectile());
             LaunchMissile();
 
+            // determine the next point in time to shoot missile
             _shootingTime = Time.time + _shootingPeriod;
-            
         }
     }
 
@@ -45,44 +38,29 @@ public class EnemyMissileLauncher : MonoBehaviour {
 
         // Determine a random target in the game field
         Vector3 _targetPosition = new Vector3(Random.Range(_target.XMin, _target.XMax), _target.Y, Random.Range(_target.ZMin, _target.ZMax));
-        _target.BullsEyeTf.position = _targetPosition + new Vector3(0f, .1f, 0f);
-
-        //transform.LookAt(_targetPosition);
+        _target.BullsEyeTf.position = _targetPosition + new Vector3(0f, .1f, 0f);   // place bullzeye to the acquiared position
 
         // Calculate the distance between the cannon and the target
         float dist = Vector3.Distance(_targetPosition, _cannonPosition);
 
-        // find the plane angle
-        float planeAngle;
-        Vector3 from = _targetPosition - _cannonPosition;
-        Vector3 to = transform.right;
-
-        // angle returns the absolute value only [0-180]
-        planeAngle = Vector3.Angle(from, to);
-
-        // use cross product to find real value [-180 - +180]
-        Vector3 cross = Vector3.Cross(from, to);
-        if (cross.y < 0) planeAngle = -planeAngle;
-
-        // Instantiate a projectile (missile) TODO: FIX Y ROTATION
+        // Instantiate a projectile (missile) 
         float _firingAngle = Random.Range(_projectilePhysics.FiringAngleMin, _projectilePhysics.FiringAngleMax);
-        GameObject missile = Instantiate(_projectile, transform.position, Quaternion.Euler(-_firingAngle, 0f, 0f)) as GameObject;
+        GameObject missile = Instantiate(_projectile, transform.position, Quaternion.identity) as GameObject;
         //missile.transform.parent = _missileContainer;   // stack missiles under launcher object
 
         // calculate initival velocity required to land the missile on target
-        float Vi = Mathf.Sqrt(dist * 9.8f / (Mathf.Sin(Mathf.Deg2Rad * _firingAngle * 2)));
-        float Vx, Vy, Vz;   // x,y,z components of the initial velocity
+        float Vi = Mathf.Sqrt(dist * Physics.gravity.magnitude / (Mathf.Sin(Mathf.Deg2Rad * _firingAngle * 2)));
 
-        Vx = Vi * Mathf.Cos(Mathf.Deg2Rad * _firingAngle) * Mathf.Cos(planeAngle * Mathf.Deg2Rad);
-        Vy = Vi * Mathf.Sin(Mathf.Deg2Rad * _firingAngle);
-        Vz = Vi * Mathf.Cos(Mathf.Deg2Rad * _firingAngle) * Mathf.Sin(planeAngle * Mathf.Deg2Rad);
+        // Calculate the local velocity vector: Y=Up | Z=Forward, thus: Vi x Sin(angl) = Vy  &  Vi x Cos(angl) = Vz
+        Vector3 LocalVelocity = new Vector3(0f, Vi * Mathf.Sin(Mathf.Deg2Rad * _firingAngle), Vi * Mathf.Cos(Mathf.Deg2Rad * _firingAngle));
 
+        // transform this local velocity vector to global space
+        missile.transform.LookAt(_targetPosition);  
+        Vector3 Local2GlobalVelocity = missile.transform.TransformVector(LocalVelocity)*
+                                       (1f/missile.transform.localScale.x);
         // finally, set the initial velocity of the missile - LAUNCH THE BABY
-        missile.GetComponent<Rigidbody>().velocity = new Vector3(Vx, Vy, Vz);
-
-
+        missile.GetComponent<Rigidbody>().velocity = Local2GlobalVelocity;
     }
-
 }
 
 [Serializable]
@@ -118,9 +96,9 @@ public class CannonPlacement
     //           PLANE : Scale=1
     //      =====================
     //      |                   |
-    //      |          <---5--->|   _cannonPlaneTf.position.x + 5*_cannonPlaneTf.localScale.x;
-    //      |         x         |   _cannonPlaneTf.position.x
-    //      |<---5--->          |   _cannonPlaneTf.position.x - 5*_cannonPlaneTf.localScale.x;
+    //      |          <---5--->|   _cannonPlaneTf.position.x + 5*_cannonPlaneTf.localScale.x;  : XMax
+    //      |         x         |   _cannonPlaneTf.position.x                                   : XMid
+    //      |<---5--->          |   _cannonPlaneTf.position.x - 5*_cannonPlaneTf.localScale.x;  : XMin
     //      |                   |
     //      =====================
     //      <-------- 10 ------->
