@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 public class MissileScript : MonoBehaviour
 {
 
+    [SerializeField] private ParticleSystem _explosion;
+
     private Rigidbody rb;   
 
 	void Start ()
@@ -22,9 +24,14 @@ public class MissileScript : MonoBehaviour
     {
         if (other.tag == "Ground")
         {
-            Destroy(gameObject);
-            
+           Detonate();
         }
+    }
+
+    void Detonate()
+    {
+        Instantiate(_explosion, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 	
 }

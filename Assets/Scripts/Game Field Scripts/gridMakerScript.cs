@@ -4,6 +4,7 @@ using System.Collections;
 public class gridMakerScript : MonoBehaviour
 
 {
+    // static variables
     public static bool GameStarted = false;     // missiles start to launch after GameStarted = true;
     public static bool InitializationStarted = false;   // Makes sure world initialization code is called only once
                                                         // otherwise player can spam "Spacebar" and instantiate multiple lines
@@ -13,12 +14,14 @@ public class gridMakerScript : MonoBehaviour
     public float WaitLength;
 
     public Transform GameFieldPlane;
+    public GameObject Background;
+
+    public HouseSpawner HouseSpawner;
 
     private Vector3 _startingPosition;
     private float _lineSpacing;
 	
-	//Background
-	public GameObject Background;
+
 	
 	
 	void Start ()
@@ -56,7 +59,9 @@ public class gridMakerScript : MonoBehaviour
 	{
 		Background.SetActive(true);
 		Background.GetComponent<AudioSource>().Play();
-	    GameStarted = true;     // after background is shown, enable the GameStarted flag, so missiles can start launching
+
+        HouseSpawner.StartSpawningHouses();
+	    
 	}
 	
 }
