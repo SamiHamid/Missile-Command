@@ -37,12 +37,12 @@ public class HouseSpawner : MonoBehaviour
 
     public float ZMin
     {
-        get { return _gameField.transform.position.z - 5 * _gameField.localScale.z * (1 - ZOffset); }
+        get { return (_gameField.transform.position.z - 5 * _gameField.localScale.z) * (1 - ZOffset); }
     }
 
     public float Zmax
     {
-        get { return _gameField.transform.position.z + 5 * _gameField.localScale.z * (1 - ZOffset); }
+        get { return (_gameField.transform.position.z + 5 * _gameField.localScale.z) * (1 - ZOffset); }
     }
 
     // unity functions	
