@@ -24,21 +24,20 @@ public class EnemyMissileScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Ground")
-        {
-            Detonate();
-        }
-
-        if (other.tag == "DHouse")
-        {
-            Debug.Log("HIT DEST HOUSE");
-        }
 
         if (other.tag == "House")
         {
             SpawnSharpnel(other.transform.position);
             Detonate();
             SwapHouses(other.transform.gameObject);
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.transform.tag == "Ground")
+        {
+            Detonate();
         }
     }
 

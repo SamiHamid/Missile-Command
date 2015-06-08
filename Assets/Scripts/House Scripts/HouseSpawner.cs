@@ -21,7 +21,7 @@ public class HouseSpawner : MonoBehaviour
     // will be used for spawning houses. We don't want hosues to spawn
     // at the edges of the playing field.
     [Range(0f, 0.2f)] public float XOffset;
-    [Range(0f, 0.2f)] public float ZOffset;
+    [Range(0f, 0.6f)] public float ZOffset;
 
     //======================================
     // Function Definitions
@@ -37,12 +37,12 @@ public class HouseSpawner : MonoBehaviour
 
     public float ZMin
     {
-        get { return (_gameField.transform.position.z - 5 * _gameField.localScale.z) * (1 - ZOffset); }
+        get { return _gameField.transform.position.z - 5 * _gameField.localScale.z * (1 - ZOffset); }
     }
 
     public float Zmax
     {
-        get { return (_gameField.transform.position.z + 5 * _gameField.localScale.z) * (1 - ZOffset); }
+        get { return _gameField.transform.position.z + 5 * _gameField.localScale.z * (1 - ZOffset); }
     }
 
     // unity functions	

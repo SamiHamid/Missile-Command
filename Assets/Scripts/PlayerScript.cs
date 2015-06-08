@@ -33,7 +33,7 @@ public class PlayerScript : MonoBehaviour
 	
 	void Update () 
     {
-	    if (Input.GetMouseButtonDown(0))
+	    if (gridMakerScript.GameStarted && Input.GetMouseButtonDown(0))
 	    {
 	        ShootMissile();
 	    }

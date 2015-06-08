@@ -18,7 +18,7 @@ public class EnemyMissileLauncher : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if (gridMakerScript.GameStarted && Time.time >= _shootingTime) 
+        if (gridMakerScript.GameStarted && Time.time >= _shootingTime && AnyTargetsLeft()) 
         {
             LaunchMissile();
 
@@ -67,6 +67,11 @@ public class EnemyMissileLauncher : MonoBehaviour {
     {
         int index = Random.Range(0, _houseContainer.transform.childCount);
         return _houseContainer.transform.GetChild(index).position;
+    }
+
+    bool AnyTargetsLeft()
+    {
+        return _houseContainer.transform.childCount != 0;
     }
 }
 
