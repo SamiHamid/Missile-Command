@@ -1,34 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Runtime.InteropServices;
 
-public class MissileScript : MonoBehaviour
+public class EnemyMissileScript : MonoBehaviour 
 {
+    [SerializeField]
+    private ParticleSystem _explosion;
 
-    [SerializeField] private ParticleSystem _explosion;
+    private Rigidbody rb;
 
-    private Rigidbody rb;   
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
-	void Start ()
-	{
-	    rb = GetComponent<Rigidbody>();
-	}
-	
-	void FixedUpdate ()
-	{
+    void FixedUpdate()
+    {
         // handle trajectory rotation -- rotate in accordance with the velocity
-	    transform.rotation = Quaternion.LookRotation(rb.velocity);
+        transform.rotation = Quaternion.LookRotation(rb.velocity);
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Ground")
         {
-           Detonate();
+            Detonate();
         }
     }
 
-    void Detonate()
+    public void Detonate()
     {
         Instantiate(_explosion, transform.position, Quaternion.identity);
         Destroy(gameObject);

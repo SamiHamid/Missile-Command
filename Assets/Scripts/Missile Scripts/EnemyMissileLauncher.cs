@@ -7,6 +7,7 @@ public class EnemyMissileLauncher : MonoBehaviour {
  
     [SerializeField] private GameObject _projectile;
     [SerializeField] private Transform _missileContainer;
+    [SerializeField] private GameObject _houseContainer;
     [SerializeField] private float _shootingPeriod;
 
     [SerializeField] private ProjectilePhysics _projectilePhysics;
@@ -22,7 +23,7 @@ public class EnemyMissileLauncher : MonoBehaviour {
             LaunchMissile();
 
             // determine the next point in time to shoot missile
-            _shootingTime = Time.time + _shootingPeriod;
+            _shootingTime = Time.time + _shootingPeriod;    // wanna add randomness?
         }
     }
 
@@ -37,7 +38,7 @@ public class EnemyMissileLauncher : MonoBehaviour {
         transform.position = _cannonPosition;
 
         // Determine a random target in the game field
-        Vector3 _targetPosition = new Vector3(Random.Range(_target.XMin, _target.XMax), _target.Y, Random.Range(_target.ZMin, _target.ZMax));
+        Vector3 _targetPosition = GetRandomTarget(); //new Vector3(Random.Range(_target.XMin, _target.XMax), _target.Y, Random.Range(_target.ZMin, _target.ZMax));
         _target.BullsEyeTf.position = _targetPosition + new Vector3(0f, .1f, 0f);   // place bullzeye to the acquiared position
 
         // Calculate the distance between the cannon and the target
@@ -60,6 +61,12 @@ public class EnemyMissileLauncher : MonoBehaviour {
                                        (1f/missile.transform.localScale.x);
         // finally, set the initial velocity of the missile - LAUNCH THE BABY
         missile.GetComponent<Rigidbody>().velocity = Local2GlobalVelocity;
+    }
+
+    private Vector3 GetRandomTarget()
+    {
+        int index = Random.Range(0, _houseContainer.transform.childCount);
+        return _houseContainer.transform.GetChild(index).position;
     }
 }
 

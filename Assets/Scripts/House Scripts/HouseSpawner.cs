@@ -14,7 +14,7 @@ public class HouseSpawner : MonoBehaviour
     [SerializeField] private GameObject[] _housePrefabs;
     [SerializeField] private Transform _gameField;
     [SerializeField] private int _howManyHouses;
-    [Range(2f, 10f)] public float _minHouseDistance;
+    [Range(2f, 20f)] public float _minHouseDistance;
     [SerializeField] private float _spawnDelay;
 
     // an offset value of 0.1 means that 90% of the playing field
