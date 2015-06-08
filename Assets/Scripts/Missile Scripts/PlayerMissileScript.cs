@@ -52,13 +52,4 @@ public class PlayerMissileScript : MonoBehaviour
             other.GetComponent<EnemyMissileScript>().Detonate();
         }
     }
-
-    void OnTriggerStay(Collider other)
-    {
-        if (other.tag == "Enemy Missile")
-        {
-            Debug.Log("COLLIDING WITH ENEMY MISSILE (STAY)");
-            other.GetComponent<EnemyMissileScript>().Detonate();
-        }
-    }
 }
