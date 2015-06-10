@@ -24,11 +24,7 @@ public class PlayerScript : MonoBehaviour
     // unity functions	
 	void Start () 
     {
-	    if (_playerMissileShooter.transform)
-	    {
-	        Debug.Log("OVR Null, switching missile shooter to normal cam");
-            _playerMissileShooter = GameObject.Find("PlayerMissileLauncher_Normal").transform;
-	    }
+
 	}
 	
 	void Update () 
