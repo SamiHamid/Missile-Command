@@ -14,16 +14,41 @@ public class EnemyMissileLauncher : MonoBehaviour {
     [SerializeField] private CannonPlacement _cannon;
     [SerializeField] private TargetPlacement _target;
 
+    [SerializeField] private Managers _managers;
+
     private float _shootingTime;
+
+    private int _missileCount;
+
+    // Getters & Setters
+    public int MissileCount
+    {
+        get { return _missileCount; }
+        set { _missileCount = value; }
+    }
+
+    public float ShootingPeriod
+    {
+        get { return _shootingPeriod; }
+        set { _shootingPeriod = value; }
+    }
+
 
     void FixedUpdate()
     {
-        if (gridMakerScript.GameStarted && Time.time >= _shootingTime && AnyTargetsLeft()) 
+        if (GameManager.GameStarted && _missileCount > 0 && Time.time >= _shootingTime && AnyTargetsLeft()) 
         {
             LaunchMissile();
 
             // determine the next point in time to shoot missile
             _shootingTime = Time.time + _shootingPeriod;    // wanna add randomness?
+        }
+
+        // TODO: Last missile cannot be defended, Fix the last missile issue later on
+        if (_missileCount == 0 && GameManager.GameStarted)
+        {
+            _managers.GM.LevelFinished();
+            GameManager.GameStarted = false;
         }
     }
 
@@ -61,6 +86,11 @@ public class EnemyMissileLauncher : MonoBehaviour {
                                        (1f/missile.transform.localScale.x);
         // finally, set the initial velocity of the missile - LAUNCH THE BABY
         missile.GetComponent<Rigidbody>().velocity = Local2GlobalVelocity;
+
+        // update the missile count
+        _missileCount--;
+        _managers.UI.UpdateEnemyMissileUI(_missileCount);
+
     }
 
     private Vector3 GetRandomTarget()
@@ -72,6 +102,25 @@ public class EnemyMissileLauncher : MonoBehaviour {
     bool AnyTargetsLeft()
     {
         return _houseContainer.transform.childCount != 0;
+    }
+}
+
+[Serializable]
+public class Managers
+{
+    [SerializeField] private GameManager _gm;
+    [SerializeField] private UIManager _ui;
+
+    public UIManager UI
+    {
+        get { return _ui; }
+        set { _ui = value; }
+    }
+
+    public GameManager GM
+    {
+        get { return _gm; }
+        set { _gm = value; }
     }
 }
 

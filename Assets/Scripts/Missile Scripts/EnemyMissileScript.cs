@@ -8,7 +8,6 @@ public class EnemyMissileScript : MonoBehaviour
     [SerializeField] private GameObject _sharpnel;
     [SerializeField] private float _forceMagnitude;
 
-
     private Rigidbody rb;
 
     void Start()
@@ -51,6 +50,8 @@ public class EnemyMissileScript : MonoBehaviour
 
         // cleanup the regular house
         Destroy(house);
+
+        GameObject.FindObjectOfType<UIManager>().DestroyABuilding();
     }
 
     private void SpawnSharpnel(Vector3 housePos)

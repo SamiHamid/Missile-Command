@@ -4,23 +4,29 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour
 {
-    [SerializeField] private GameObject _playerMissile;
-    [SerializeField] private Transform _playerMissileShooter;
-
-    [SerializeField] private float force;
-
     //======================================
     // Variable Declarations
 	
 	// handles
-	
-    // editor variables
+	[SerializeField] private GameObject _playerMissile;
+    [SerializeField] private Transform _playerMissileShooter;
+    [SerializeField] private Managers _managers;
 
+    // editor variables
+    [SerializeField] private float force;
+
+
+    private int _missileCount;
 
     //======================================
     // Function Definitions
 
     // getters & setters
+    public int MissileCount
+    {
+        get { return _missileCount; }
+        set { _missileCount = value; }
+    }
 
     // unity functions	
 	void Start () 
@@ -30,7 +36,7 @@ public class PlayerScript : MonoBehaviour
 	
 	void Update () 
     {
-	    if (gridMakerScript.GameStarted && Input.GetMouseButtonDown(0))
+	    if (GameManager.GameStarted && Input.GetMouseButtonDown(0) && _missileCount > 0)
 	    {
 	        ShootMissile();
 	    }
@@ -43,6 +49,9 @@ public class PlayerScript : MonoBehaviour
             Instantiate(_playerMissile, _playerMissileShooter.position, Quaternion.identity) as GameObject;
 
         missile.GetComponent<Rigidbody>().velocity = _playerMissileShooter.forward * force;
+
+        _missileCount--;
+        _managers.UI.UpdatePlayerMissileUI(_missileCount);
     }
 
 

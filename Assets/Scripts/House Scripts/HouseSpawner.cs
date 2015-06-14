@@ -45,6 +45,12 @@ public class HouseSpawner : MonoBehaviour
         get { return _gameField.transform.position.z + 5 * _gameField.localScale.z * (1 - ZOffset); }
     }
 
+    public int HowManyHouses
+    {
+        get { return _howManyHouses; }
+        set { _howManyHouses = value; }
+    }
+
     // unity functions	
 	void Start () 
     {
@@ -73,7 +79,7 @@ public class HouseSpawner : MonoBehaviour
             yield return new WaitForSeconds(_spawnDelay);
         }
 
-        gridMakerScript.GameStarted = true;     // after background is shown, enable the GameStarted flag, so missiles can start launching
+        GameManager.GameStarted = true;     // after background is shown, enable the GameStarted flag, so missiles can start launching
     }
 
     Vector3 RandomPosition()

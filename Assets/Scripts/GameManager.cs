@@ -6,7 +6,15 @@ using UnityEditor.AnimatedValues;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int _startingLevel;
+
+    public static bool GameStarted = false;     // missiles start to launch after GameStarted = true;
+
+    [SerializeField] private UIManager _UI;
+    [SerializeField] private HouseSpawner _houseSpawner;
+    [SerializeField] private EnemyMissileLauncher _missileLauncher;
+    [SerializeField] private PlayerScript _player;
+
+    [SerializeField] private int _currentLevel;    // 1 - 10
 
     private LevelData[] LData;
 
@@ -14,7 +22,31 @@ public class GameManager : MonoBehaviour
 	void Start ()
 	{
 	    ReadLevelData();
+	    UpdateLevelVariables();
 	}
+
+    private void UpdateLevelVariables()
+    {
+        int i = _currentLevel - 1;
+        Debug.Log("Updated Level Variables for Level " + LData[i].Level);
+
+        _houseSpawner.HowManyHouses = LData[i].BuildingCount;
+        _missileLauncher.MissileCount = LData[i].EnemyMissileCount;
+        _missileLauncher.ShootingPeriod = LData[i].EnemyMissileDelay;
+        _player.MissileCount = LData[i].PlayerMissileCount;
+
+        LData[i].Print();
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        _UI.UpdateLevelText(_currentLevel);
+        _UI.UpdateEnemyMissileUI(_missileLauncher.MissileCount);
+        _UI.UpdatePlayerMissileUI(_player.MissileCount);
+        _UI.UpdateBuildingCountText(_houseSpawner.HowManyHouses);
+        // TODO: Score Text Update Function
+    }
 
     // Update is called once per frame
 	void Update () 
@@ -22,6 +54,22 @@ public class GameManager : MonoBehaviour
 	
 	}
 
+
+    public void LevelFinished()
+    {
+        float buildingPct = 100 * (_houseSpawner.transform.childCount / LData[_currentLevel-1].BuildingCount);
+        
+        if (buildingPct > LData[_currentLevel - 1].PctToWin)
+        {
+            Debug.Log("LEVEL FINISHED: GAME WON!");
+        }
+
+        else
+        {
+            Debug.Log("LEVEL FINISHED: GAME LOST!");
+        }
+
+    }
 
     private void ReadLevelData()
     {
@@ -55,16 +103,13 @@ public class GameManager : MonoBehaviour
             float BuildingPct       = float.Parse(values[8]);
 
             LData[i++] = new LevelData(level, EMissileCount, EMissilePeriod, EMissileSpeed, BugCount, PMissileCount, SupplyCrateCount, BuildingCount, BuildingPct);
-            LData[i-1].Print();
+            //LData[i-1].Print();
         }
 
         file.Close();
     }
 
 }
-
-
-
 
 public class LevelData
 {
