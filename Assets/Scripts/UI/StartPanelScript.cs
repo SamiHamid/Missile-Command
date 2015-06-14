@@ -37,7 +37,7 @@ public class StartPanelScript : MonoBehaviour {
 		{
 			if(GameCanStart)
 			{
-				if(!gridMakerScript.InitializationStarted && !gridMakerScript.GameStarted)
+                if (!gridMakerScript.InitializationStarted && !GameManager.GameStarted)
 				{
 				    Destroy(GameObject.Find("UI Elements"));
 

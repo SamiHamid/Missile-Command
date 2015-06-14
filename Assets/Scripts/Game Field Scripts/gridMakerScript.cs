@@ -5,7 +5,6 @@ public class gridMakerScript : MonoBehaviour
 
 {
     // static variables
-    public static bool GameStarted = false;     // missiles start to launch after GameStarted = true;
     public static bool InitializationStarted = false;   // Makes sure world initialization code is called only once
                                                         // otherwise player can spam "Spacebar" and instantiate multiple lines
 	// Field Bars
