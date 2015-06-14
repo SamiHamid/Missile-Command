@@ -11,6 +11,7 @@ public class StartPanelScript : MonoBehaviour {
 	public GameObject HowToLeftObject;
 	public GameObject HowToRightObject;
 	public GameObject HowToButton;
+	private HowtoScript HowScript;
 	
 	// Starting Game
 	public GameObject Grid;
@@ -27,8 +28,6 @@ public class StartPanelScript : MonoBehaviour {
 		anim = GetComponent<Animator>();
 		GridScript = Grid.GetComponent<gridMakerScript>();
 		EnvScript = EnvironmentUI.GetComponent<EnvironmentUIScript>();
-		
-		
 	}
 	
 	void Update()
@@ -39,16 +38,15 @@ public class StartPanelScript : MonoBehaviour {
 			{
                 if (!gridMakerScript.InitializationStarted && !GameManager.GameStarted)
 				{
-				    Destroy(GameObject.Find("UI Elements"));
-
-					GridScript.GameBegin();
-					EnvScript.Activate();
+				    //Destroy(GameObject.Find("UI Elements"));
+					Invoke("GameStarts", 5);
+					FadeToGame();
 				}
 			}
 			
 			else
 			{
-				Fade ();
+				FadeStart ();
                 GameObject parent = new GameObject();
 			    parent.name = "UI Elements";
 
@@ -66,13 +64,22 @@ public class StartPanelScript : MonoBehaviour {
 		
 	}
 	
-	public void Fade()
+	// Fade StartMenu
+	public void FadeStart()
 	{
 		anim.SetBool ("Fade",true);
 	}
 	
-	public void HowToFade()
+	public void FadeToGame()
 	{
-		
+		HowScript = HowToMiddleObject.GetComponent<HowtoScript>();
+		HowScript.HowToFade();
+	}
+	
+	// Starts Game
+	void GameStarts()
+	{
+		GridScript.GameBegin();
+		EnvScript.Activate();
 	}
 }

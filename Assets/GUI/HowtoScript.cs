@@ -3,17 +3,18 @@ using System.Collections;
 
 public class HowtoScript : MonoBehaviour {
 
-	private Animator anim;
+	private Animator animator;
 	
-	void Start () 
+	void Awake () 
 	{
-		anim = GetComponent<Animator>();
+		animator = GetComponent<Animator>();
+		Debug.Log("Im Being Called");
 	}
 	
 
 	public void HowToFade()
 	{
-		anim.SetBool ("Fade",true);
+		animator.SetBool ("Fading",true);
 		Debug.Log("Fading Start Menu");
 	}
 }
