@@ -13,7 +13,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HouseSpawner _houseSpawner;
     [SerializeField] private EnemyMissileLauncher _missileLauncher;
     [SerializeField] private PlayerScript _player;
-
+    
+    //GUI
+    public GameObject LoseUI;
+    public GameObject RestartUI;
+    public GameObject WinUI;
+    
     [SerializeField] private int _currentLevel;    // 1 - 10
 
     private LevelData[] LData;
@@ -57,15 +62,19 @@ public class GameManager : MonoBehaviour
 
     public void LevelFinished()
     {
-        float buildingPct = 100 * (_houseSpawner.transform.childCount / LData[_currentLevel-1].BuildingCount);
+		float buildingPct = 100 * ((float)_houseSpawner.transform.childCount / (float)LData[_currentLevel-1].BuildingCount);
+		Debug.Log ("Buildings Left: " + _houseSpawner.transform.childCount + "\nInitiallty: " + LData[_currentLevel-1].BuildingCount + "\nbuildings left %: " + buildingPct);
         
         if (buildingPct > LData[_currentLevel - 1].PctToWin)
         {
             Debug.Log("LEVEL FINISHED: GAME WON!");
+			Instantiate(WinUI, new Vector3 (0.0f, 26.6f, 39.6f), Quaternion.identity);     
         }
 
         else
         {
+			Instantiate(LoseUI, new Vector3 (0.05f, 26.8f, 45.4f), Quaternion.identity);
+			Instantiate (RestartUI, new Vector3 (0.0f, 3.6f, -46f), Quaternion.identity);
             Debug.Log("LEVEL FINISHED: GAME LOST!");
         }
 
