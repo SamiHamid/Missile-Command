@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class PlayerScript : MonoBehaviour
 {
     [SerializeField] private GameObject _playerMissile;
     [SerializeField] private Transform _playerMissileShooter;
 
-    public float force;
+    [SerializeField] private float force;
 
     //======================================
     // Variable Declarations
@@ -24,11 +25,7 @@ public class PlayerScript : MonoBehaviour
     // unity functions	
 	void Start () 
     {
-	    if (_playerMissileShooter.transform)
-	    {
-	        Debug.Log("OVR Null, switching missile shooter to normal cam");
-            _playerMissileShooter = GameObject.Find("PlayerMissileLauncher_Normal").transform;
-	    }
+
 	}
 	
 	void Update () 

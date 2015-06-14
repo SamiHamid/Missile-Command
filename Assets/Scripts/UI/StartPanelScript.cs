@@ -39,6 +39,8 @@ public class StartPanelScript : MonoBehaviour {
 			{
 				if(!gridMakerScript.InitializationStarted && !gridMakerScript.GameStarted)
 				{
+				    Destroy(GameObject.Find("UI Elements"));
+
 					GridScript.GameBegin();
 					EnvScript.Activate();
 				}
@@ -47,10 +49,17 @@ public class StartPanelScript : MonoBehaviour {
 			else
 			{
 				Fade ();
-				Instantiate (HowToMiddleObject, gameObject.transform.position, Quaternion.identity);
-				Instantiate (HowToLeftObject, gameObject.transform.position, Quaternion.Euler (0.0f, -50f, 0.0f));
-				Instantiate (HowToRightObject, gameObject.transform.position, Quaternion.Euler (0.0f, 50f, 0.0f));
-				Instantiate (HowToButton, gameObject.transform.position, Quaternion.identity);
+                GameObject parent = new GameObject();
+			    parent.name = "UI Elements";
+
+				GameObject instance = Instantiate (HowToMiddleObject, gameObject.transform.position, Quaternion.identity) as GameObject;
+			    instance.transform.parent = parent.transform;
+                instance = Instantiate(HowToLeftObject, gameObject.transform.position, Quaternion.Euler(0.0f, -50f, 0.0f)) as GameObject;
+                instance.transform.parent = parent.transform;
+                instance = Instantiate(HowToRightObject, gameObject.transform.position, Quaternion.Euler(0.0f, 50f, 0.0f)) as GameObject;
+                instance.transform.parent = parent.transform;
+                instance = Instantiate(HowToButton, gameObject.transform.position, Quaternion.identity) as GameObject;
+                instance.transform.parent = parent.transform;
 				GameCanStart = true;
 			}
 		}

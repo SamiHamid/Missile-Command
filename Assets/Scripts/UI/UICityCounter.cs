@@ -4,27 +4,27 @@ using System.Collections;
 public class UICityCounter : MonoBehaviour 
 {
 
-	private int CityCount;
+	private int _cityCount;
 	
 	void Awake()
 	{
-		CityCount = 0;
+		_cityCount = 0;
 	}
 	
 	void Update()
 	{
-		GetComponent<TextMesh>().text = "CITIES REMAINING: " + CityCount;
+		GetComponent<TextMesh>().text = "CITIES REMAINING: " + _cityCount;
 	}
 	
 	public void AddCity()
 	{
-		CityCount++;
+		_cityCount++;
 		Debug.Log("City Added");
 	}
 	
 	public void SubtractCity()
 	{
-		CityCount--;
+		_cityCount--;
 		Debug.Log("City Subtracted");
 	}
 }

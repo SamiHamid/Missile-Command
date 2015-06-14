@@ -32,46 +32,59 @@ public class UITester : MonoBehaviour {
 	}
 	
 	
-	void Update () 
+	void Update ()
 	{
-		 if (Input.GetKeyDown(KeyCode.Q))
-	 	{
-			LevelScript.AddLevel();
-	 	}
-	 	
-		if (Input.GetKeyDown(KeyCode.W))
-		{
-			ScoreScript.AddScore();
-		}
-		
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			EnemyMissileScript.AddEnemyMissile();
-		}
-		
-		if (Input.GetKeyDown(KeyCode.D))
-		{
-			EnemyMissileScript.SubtractEnemyMissile();
-		}
-		
-		if (Input.GetKeyDown(KeyCode.R))
-		{
-			UserMissileScript.AddUserMissile();
-		}
-		
-		if (Input.GetKeyDown(KeyCode.F))
-		{
-			UserMissileScript.SubtractUserMissile();
-		}
-		
-		if (Input.GetKeyDown(KeyCode.T))
-		{
-			CitiesCounterScript.AddCity();
-		}
-		
-		if (Input.GetKeyDown(KeyCode.G))
-		{
-			CitiesCounterScript.SubtractCity();
-		}
+	    DebugKeyStrokes();
+
+	    UpdateStats();
 	}
+
+    private void UpdateStats()
+    {
+        
+    }
+
+    private void DebugKeyStrokes()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            LevelScript.AddLevel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            ScoreScript.AddScore();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            EnemyMissileScript.AddEnemyMissile();
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            EnemyMissileScript.SubtractEnemyMissile();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            UserMissileScript.AddUserMissile();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            UserMissileScript.SubtractUserMissile();
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            CitiesCounterScript.AddCity();
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            CitiesCounterScript.SubtractCity();
+        }
+
+    }
 }
