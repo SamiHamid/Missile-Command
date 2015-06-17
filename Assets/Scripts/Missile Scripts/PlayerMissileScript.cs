@@ -48,7 +48,7 @@ public class PlayerMissileScript : MonoBehaviour
     {
         if (other.tag == "Enemy Missile")
         {
-            Debug.Log("COLLIDING WITH ENEMY MISSILE");
+            //Debug.Log("COLLIDING WITH ENEMY MISSILE");
             other.GetComponent<EnemyMissileScript>().Detonate();
         }
     }
