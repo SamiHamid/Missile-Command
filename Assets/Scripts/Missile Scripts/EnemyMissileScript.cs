@@ -72,12 +72,12 @@ public class EnemyMissileScript : MonoBehaviour
         GameObject sharpnel = Instantiate(_sharpnel, pos, Quaternion.identity) as GameObject;
 
         // add the negative displacement force to sharpnel so it moves towards the house
-        sharpnel.GetComponent<Rigidbody>().AddForce(-displacement * _forceMagnitude);
+      //  sharpnel.GetComponent<Rigidbody>().AddForce(-displacement * _forceMagnitude);		// impact_point prefab has no rigidbody
     }
 
     public void Detonate()
     {
-        Instantiate(_explosion, transform.position, Quaternion.identity);
+        //Instantiate(_explosion, transform.position, Quaternion.identity);			// this effect is not used; does not look like "tron"
         Destroy(gameObject);
     }
 	
