@@ -1,15 +1,20 @@
 ﻿#pragma strict
-var totalTime : float;
+//var totalTime : float;
 var waitTime : float;
 var rend : Renderer;
 var alpha : float = 0.0;
+var startMat : Material;
+var finalMat : Material;
+var duration : float = 2.0;
 
 function Start () {
-	totalTime = Random.Range(1.0,3.0);
-	waitTime = Random.Range(0.0,5.0);
+	//totalTime = Random.Range(1.0,3.0);
+	waitTime = Random.Range(0.0,3.0);
 	rend = GetComponent.<Renderer>();
 	rend.enabled = false;
 	rend.material.color.a = 0.0;
+	startMat = rend.material;
+	Debug.Log("startMat = " + startMat);
 	//DynamicGI.SetEmissive(rend, new Color(1f, 0.1f, 0.5f, 1.0f) * 0.0);  // no effect
 	//rend.material.SetFloat("_EmissionValue", 0.0); // does nothing
 	//rend.material.SetColor("_EmissionColor", color); // error; not sure how to set alpha in that color
@@ -42,13 +47,27 @@ function Update () {
 	}
 	*/
 	
+	// Change alpha over time.  Does not effect emission.  Causes cubes to change from transparent to opaque.
 	if (Time.time > waitTime && Time.time < waitTime+1) {
 		alpha = Time.time - waitTime;
 		rend.enabled = true;
 		rend.material.color.a = alpha;
 	}
-		
 	
+
+	if (Time.time > waitTime+1) {
+		rend.material.color.a = 1.0;
+		rend.material = finalMat; 	// works fine, just a bit too sudden.
+	}
+	
+	/*
+	// Problem: finalMat does not have emission
+	if (Time.time > waitTime+1) {
+		//rend.material.color.a = 1.0;  // causes light blocks to be dark ???
+		var lerp : float = Mathf.PingPong(Time.time, duration) / duration;
+		rend.material.Lerp(startMat, finalMat, lerp);
+	}
+	*/
 	
 	/*
 	// trying to change the emissive value does not work in any way/method
