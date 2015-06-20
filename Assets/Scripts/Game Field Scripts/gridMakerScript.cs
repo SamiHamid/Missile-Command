@@ -26,7 +26,7 @@ public class gridMakerScript : MonoBehaviour
 	void Start ()
 	{
 	    _startingPosition = GameFieldPlane.position - new Vector3(0, 0, 5 * GameFieldPlane.localScale.z);
-	    _lineSpacing = GameFieldPlane.localScale.z*20/NumberOfLines;
+	    _lineSpacing = GameFieldPlane.localScale.z*10/NumberOfLines;
 	}
 	
 	
