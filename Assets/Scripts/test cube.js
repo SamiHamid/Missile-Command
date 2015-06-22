@@ -9,7 +9,7 @@ var duration : float = 2.0;
 
 function Start () {
 	//totalTime = Random.Range(1.0,3.0);
-	waitTime = Random.Range(0.0,3.0);
+	waitTime = Random.Range(0.0,2.0);
 	rend = GetComponent.<Renderer>();
 	rend.enabled = false;
 	rend.material.color.a = 0.0;
