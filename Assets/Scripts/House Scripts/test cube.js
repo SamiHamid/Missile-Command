@@ -6,15 +6,16 @@ var alpha : float = 0.0;
 var startMat : Material;
 var finalMat : Material;
 var duration : float = 2.0;
+var finishedRendering : boolean = false;
 
 function Start () {
 	//totalTime = Random.Range(1.0,3.0);
-	waitTime = Random.Range(0.0,2.0);
+	waitTime = Time.time + Random.Range(0.0,2.0);
 	rend = GetComponent.<Renderer>();
 	rend.enabled = false;
 	rend.material.color.a = 0.0;
 	startMat = rend.material;
-	Debug.Log("startMat = " + startMat);
+	//Debug.Log("startMat = " + startMat);
 	//DynamicGI.SetEmissive(rend, new Color(1f, 0.1f, 0.5f, 1.0f) * 0.0);  // no effect
 	//rend.material.SetFloat("_EmissionValue", 0.0); // does nothing
 	//rend.material.SetColor("_EmissionColor", color); // error; not sure how to set alpha in that color
@@ -55,9 +56,11 @@ function Update () {
 	}
 	
 
-	if (Time.time > waitTime+1) {
-		rend.material.color.a = 1.0;
+	if (Time.time > waitTime+1  && finishedRendering == false) {
+		alpha = 1.0;
+		rend.material.color.a = alpha;
 		rend.material = finalMat; 	// works fine, just a bit too sudden.
+		finishedRendering = true;
 	}
 	
 	/*
