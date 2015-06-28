@@ -79,6 +79,7 @@ public class HouseSpawner : MonoBehaviour
             yield return new WaitForSeconds(_spawnDelay);
         }
 
+        yield return new WaitForSeconds(_spawnDelay);
         GameManager.GameStarted = true;     // after background is shown, enable the GameStarted flag, so missiles can start launching
     }
 

@@ -33,7 +33,7 @@ public class StartUpScript : MonoBehaviour {
 	
 	void Update () 
 	{
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0) && !GameManager.GameStarted)
 		{	
 			// Start In
 			if (StartUpCount == 0)
@@ -63,6 +63,7 @@ public class StartUpScript : MonoBehaviour {
 		//SKIP STARTUP MENU
 		if (Input.GetButtonDown("Jump"))
 		{
+		    StartUpCount = 3;   // directly skip animations
 			GameOn();
 			HowToMiddleObj.SetActive(false);
 			HowToLeftObj.SetActive(false);
@@ -80,8 +81,8 @@ public class StartUpScript : MonoBehaviour {
 	{
 		if (!gridMakerScript.InitializationStarted && !GameManager.GameStarted)
 		{
-		GridScript.GameBegin();
-		EnvScript.Activate();
+		    GridScript.GameBegin();
+		    EnvScript.Activate();
 		}
 	}
 }

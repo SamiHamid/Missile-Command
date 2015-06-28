@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class EnemyMissileScript : MonoBehaviour 
 {
     [SerializeField] private ParticleSystem _explosion;
-    [SerializeField] private GameObject _sharpnel;
-    [SerializeField] private float _forceMagnitude;
+    [SerializeField] private GameObject _impactPoint;
 
     private Rigidbody rb;
 
@@ -51,6 +51,7 @@ public class EnemyMissileScript : MonoBehaviour
         // cleanup the regular house
         Destroy(house);
 
+        // update UI
         GameObject.FindObjectOfType<UIManager>().DestroyABuilding();
     }
 
@@ -65,14 +66,12 @@ public class EnemyMissileScript : MonoBehaviour
 
         // normalize the displacement vector
         displacement.Normalize();
-        displacement *= 5;      // 5 meters away from the house
+        float distance = Random.Range(1f, 3f);
+        displacement *= distance;      // 1-3 meters away from the house
 
         // sharpnel spawn position          // add some height to sharpnel pos
         Vector3 pos = HPos + displacement + new Vector3(0f, 2f, 0f);
-        GameObject sharpnel = Instantiate(_sharpnel, pos, Quaternion.identity) as GameObject;
-
-        // add the negative displacement force to sharpnel so it moves towards the house
-      //  sharpnel.GetComponent<Rigidbody>().AddForce(-displacement * _forceMagnitude);		// impact_point prefab has no rigidbody
+        Instantiate(_impactPoint, pos, Quaternion.identity);
     }
 
     public void Detonate()

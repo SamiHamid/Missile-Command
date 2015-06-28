@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     public void LevelFinished()
     {
 		float buildingPct = 100 * ((float)_houseSpawner.transform.childCount / (float)LData[_currentLevel-1].BuildingCount);
-		Debug.Log ("Buildings Left: " + _houseSpawner.transform.childCount + "\nInitiallty: " + LData[_currentLevel-1].BuildingCount + "\nbuildings left %: " + buildingPct);
+		Debug.Log ("Buildings Left: " + _houseSpawner.transform.childCount + "\tInitiallty: " + LData[_currentLevel-1].BuildingCount + "\nbuildings left %: " + buildingPct);
         
         if (buildingPct > LData[_currentLevel - 1].PctToWin)
         {
@@ -116,6 +116,10 @@ public class GameManager : MonoBehaviour
 
         file.Close();
     }
+
+
+
+
 
 }
 
