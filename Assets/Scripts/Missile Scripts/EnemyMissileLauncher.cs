@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 using Random = UnityEngine.Random;
 
 public class EnemyMissileLauncher : MonoBehaviour {
@@ -20,6 +21,9 @@ public class EnemyMissileLauncher : MonoBehaviour {
 
     private int _missileCount;
 
+    private bool _lastMissileLaunched = false;
+    private bool _lastMissileLanded = false;
+
     // Getters & Setters
     public int MissileCount
     {
@@ -36,6 +40,7 @@ public class EnemyMissileLauncher : MonoBehaviour {
 
     void FixedUpdate()
     {
+        // time to launch missiles
         if (GameManager.GameStarted && _missileCount > 0 && Time.time >= _shootingTime && AnyTargetsLeft()) 
         {
             LaunchMissile();
@@ -43,12 +48,24 @@ public class EnemyMissileLauncher : MonoBehaviour {
             // determine the next point in time to shoot missile
             _shootingTime = Time.time + _shootingPeriod;    // wanna add randomness?
         }
-
-        // TODO: Last missile cannot be defended, Fix the last missile issue later on
-        if (_missileCount == 0 && GameManager.GameStarted)
+        
+        // check if the last missile is launched
+        if (_missileCount == 0 && GameManager.GameStarted && _lastMissileLanded)
         {
             _managers.GM.LevelFinished();
             GameManager.GameStarted = false;
+            _lastMissileLanded = false;
+            _lastMissileLaunched = false;
+        }
+
+        // this block can be optimized: implement callback function on collision 
+        // to set this variable true, instead of checking it every frame
+        if (_lastMissileLaunched)
+        {
+            if (!GameObject.FindGameObjectsWithTag("Enemy Missile").Any())
+            {
+                _lastMissileLanded = true;
+            }
         }
     }
 
@@ -90,6 +107,8 @@ public class EnemyMissileLauncher : MonoBehaviour {
         // update the missile count
         _missileCount--;
         _managers.UI.UpdateEnemyMissileUI(_missileCount);
+
+        if (MissileCount == 0) _lastMissileLaunched = true;
 
     }
 

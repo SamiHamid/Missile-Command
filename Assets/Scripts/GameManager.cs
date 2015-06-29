@@ -12,11 +12,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HouseSpawner _houseSpawner;
     [SerializeField] private EnemyMissileLauncher _missileLauncher;
     [SerializeField] private PlayerScript _player;
+
+    [SerializeField] private gridMakerScript _grid;
     
     //GUI
-    public GameObject LoseUI;
-    public GameObject RestartUI;
-    public GameObject WinUI;
+    [SerializeField] private UIElements _UIElements;
+   
     
     [SerializeField] private int _currentLevel;    // 1 - 10
 
@@ -26,12 +27,50 @@ public class GameManager : MonoBehaviour
 	void Start ()
 	{
 	    ReadLevelData();
-	    UpdateLevelVariables();
+	    UpdateLevelVariables(_currentLevel);
 	}
 
-    private void UpdateLevelVariables()
+    private void ReadLevelData()
     {
-        int i = _currentLevel - 1;
+        // open the data file
+        StreamReader file = new StreamReader(File.OpenRead(@"Assets/Data/levels.csv"));
+
+        // initialize LevelData Array
+        int levelCount = File.ReadAllLines(@"Assets/Data/levels.csv").Length - 1;
+        LData = new LevelData[levelCount];
+
+        // read the first line (get rid of the header). Data Line-up is as follows:
+        // Level, #EMissileCount, EMissilePeriod, EMissileSpeed, #EnemyBugs, #PMissiles, #SupplyCrate, #Building, %Building2Win
+        var line = file.ReadLine();
+
+        int i = 0;
+
+        // read the actual data
+        while (!file.EndOfStream)
+        {
+            line = file.ReadLine();
+            var values = line.Split(',');
+
+            int level = Int32.Parse(values[0]);
+            int EMissileCount = Int32.Parse(values[1]);
+            float EMissilePeriod = float.Parse(values[2]);
+            float EMissileSpeed = float.Parse(values[3]);
+            int BugCount = Int32.Parse(values[4]);
+            int PMissileCount = Int32.Parse(values[5]);
+            int SupplyCrateCount = Int32.Parse(values[6]);
+            int BuildingCount = Int32.Parse(values[7]);
+            float BuildingPct = float.Parse(values[8]);
+
+            LData[i++] = new LevelData(level, EMissileCount, EMissilePeriod, EMissileSpeed, BugCount, PMissileCount, SupplyCrateCount, BuildingCount, BuildingPct);
+            //LData[i-1].Print();
+        }
+
+        file.Close();
+    }
+
+    private void UpdateLevelVariables(int level)
+    {
+        int i = level - 1;
         Debug.Log("Updated Level Variables for Level " + LData[i].Level);
 
         _houseSpawner.HowManyHouses = LData[i].BuildingCount;
@@ -63,64 +102,128 @@ public class GameManager : MonoBehaviour
     {
 		float buildingPct = 100 * ((float)_houseSpawner.transform.childCount / (float)LData[_currentLevel-1].BuildingCount);
 		Debug.Log ("Buildings Left: " + _houseSpawner.transform.childCount + "\tInitiallty: " + LData[_currentLevel-1].BuildingCount + "\nbuildings left %: " + buildingPct);
-        
+
+        StartCoroutine(CleanUp());  // start the cleanup
         if (buildingPct > LData[_currentLevel - 1].PctToWin)
         {
             Debug.Log("LEVEL FINISHED: GAME WON!");
-			Instantiate(WinUI, new Vector3 (0.0f, 26.6f, 39.6f), Quaternion.identity);     
+			Instantiate(_UIElements.WinUI, new Vector3 (0.0f, 26.6f, 39.6f), Quaternion.identity);
+
+            StartCoroutine(AdvanceNextLevel());
         }
 
         else
         {
-			Instantiate(LoseUI, new Vector3 (0.05f, 26.8f, 45.4f), Quaternion.identity);
-			Instantiate (RestartUI, new Vector3 (0.0f, 3.6f, -46f), Quaternion.identity);
+			Instantiate(_UIElements.LoseUI, new Vector3 (0.05f, 26.8f, 45.4f), Quaternion.identity);
+			Instantiate (_UIElements.RestartUI, new Vector3 (0.0f, 3.6f, -46f), Quaternion.identity);
             Debug.Log("LEVEL FINISHED: GAME LOST!");
+
+            // TODO: what happens when current level is lost?
         }
 
-    }
+	}
 
-    private void ReadLevelData()
+    IEnumerator AdvanceNextLevel()
     {
-        // open the data file
-        StreamReader file = new StreamReader(File.OpenRead(@"Assets/Data/levels.csv"));
-
-        // initialize LevelData Array
-        int levelCount = File.ReadAllLines(@"Assets/Data/levels.csv").Length - 1;
-        LData = new LevelData[levelCount];
-
-        // read the first line (get rid of the header). Data Line-up is as follows:
-        // Level, #EMissileCount, EMissilePeriod, EMissileSpeed, #EnemyBugs, #PMissiles, #SupplyCrate, #Building, %Building2Win
-        var line = file.ReadLine();
-
-        int i = 0;
-
-        // read the actual data
-        while (!file.EndOfStream)
+        if (_currentLevel != 10)
         {
-            line = file.ReadLine();
-            var values = line.Split(',');
+            // Wait for preparations
+            Debug.Log("Loading next level in 10...");
+            yield return new WaitForSeconds(10f);
 
-            int level               = Int32.Parse(values[0]);
-            int EMissileCount       = Int32.Parse(values[1]);
-            float EMissilePeriod    = float.Parse(values[2]);
-            float EMissileSpeed     = float.Parse(values[3]);
-            int BugCount            = Int32.Parse(values[4]);
-            int PMissileCount       = Int32.Parse(values[5]);
-            int SupplyCrateCount    = Int32.Parse(values[6]);
-            int BuildingCount       = Int32.Parse(values[7]);
-            float BuildingPct       = float.Parse(values[8]);
+            // remove "Level Complete" UI
+            Destroy(GameObject.Find("LevelComplete(Clone)"));
 
-            LData[i++] = new LevelData(level, EMissileCount, EMissilePeriod, EMissileSpeed, BugCount, PMissileCount, SupplyCrateCount, BuildingCount, BuildingPct);
-            //LData[i-1].Print();
+            // level up!
+            _currentLevel++; 
+            UpdateLevelVariables(_currentLevel);
+
+            _grid.GameBegin();
+        }
+        else
+        {
+            // if last level is finished, USE GAME OVER SCREEN
+            // TODO: Game Over Code here
+            Debug.Log("END OF LEVELS, GAME OVER!");
+        }
+    }
+
+    IEnumerator CleanUp()
+    {
+        // intended to take at most 10 seconds
+        // NextLevel() function is simply called after 10 secs
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(RemoveHouses());
+        StartCoroutine(RemoveGrid());
+        MoveBullsEye();
+    }
+
+    private void MoveBullsEye()
+    {
+        // move to initial position - behind the eye
+        GameObject.FindGameObjectWithTag("BullsEye").transform.position = new Vector3(0f, 1000f, -500f);
+    }
+
+    IEnumerator RemoveGrid()
+    {
+        float wait = 0.25f;
+        _grid.DeactivateBackground();
+
+        for (int i= _grid.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(_grid.transform.GetChild(i).gameObject);
+            yield return new WaitForSeconds(wait);
         }
 
-        file.Close();
+
+    }
+
+    IEnumerator RemoveHouses()
+    {
+
+        float wait = 0.1f;
+
+        // remove destructable house parts
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("DHouse"))
+        {
+            Destroy(obj);
+            yield return new WaitForSeconds(wait);
+        }
+
+        // remove remaining houses
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("House"))
+        {
+            Destroy(obj);
+            yield return new WaitForSeconds(wait);
+        }
     }
 
 
 
 
+}
 
+[Serializable]
+public class UIElements
+{
+    [SerializeField] private GameObject _loseUI;
+    [SerializeField] private GameObject _restartUI;
+    [SerializeField] private GameObject _winUI;
+
+    public GameObject LoseUI
+    {
+        get { return _loseUI; }
+    }
+
+    public GameObject RestartUI
+    {
+        get { return _restartUI; }
+    }
+
+    public GameObject WinUI
+    {
+        get { return _winUI; }
+    }
 }
 
 public class LevelData

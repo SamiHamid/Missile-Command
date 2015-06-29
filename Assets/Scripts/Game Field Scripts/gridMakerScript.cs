@@ -34,7 +34,6 @@ public class gridMakerScript : MonoBehaviour
 	{
 	    InitializationStarted = true;       // condition is checked in caller function of gameBegin()
 		StartCoroutine(GenerateGrid());
-		Invoke("BackgroundActivated", WaitLength * NumberOfLines + 0.5f);
 	}
 	
 	// Field Bars
@@ -51,16 +50,21 @@ public class gridMakerScript : MonoBehaviour
             yield return new WaitForSeconds(WaitLength);
 		}
 		
-	}
+        BackgroundActivated();
+        HouseSpawner.StartSpawningHouses();
+    }
 	
 	// Background
 	void BackgroundActivated()
 	{
 		Background.SetActive(true);
 		Background.GetComponent<AudioSource>().Play();
-
-        HouseSpawner.StartSpawningHouses();
-	    
 	}
+
+    public void DeactivateBackground()
+    {
+        Background.GetComponent<AudioSource>().Play();
+        Background.SetActive(false);
+    }
 	
 }
