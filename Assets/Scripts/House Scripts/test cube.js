@@ -6,7 +6,8 @@ var alpha : float = 0.0;
 var startMat : Material;
 var finalMat : Material;
 var duration : float = 2.0;
-var finishedRendering : boolean = false;
+var finishedRezIn : boolean = false;
+var derezzed : boolean = false;
 
 function Start () {
 	//totalTime = Random.Range(1.0,3.0);
@@ -28,52 +29,46 @@ function Start () {
 }
 
 function Update () {
-	/*
-	if (Time.time > waitTime) {
-		if (rend.enabled == true) {
-			rend.enabled = false;
-		} else {
-			rend.enabled = true;
-		}
-		waitTime = Time.time + Random.Range(0.0,1.0);
-	}
-	*/
-	
-	/*
-	// Works okay, and looks half decent.
-	// cubes start out invisible, then become visible at random times.
-	// requires rend.enabled = false in Start()
-	if (Time.time > waitTime && rend.enabled == false) {
-		rend.enabled = true;
-	}
-	*/
-	
-	// Change alpha over time.  Does not effect emission.  Causes cubes to change from transparent to opaque.
+
+	// Change alpha over time.  Does not effect emission.  Cubes change from transparent to opaque.
 	if (Time.time > waitTime && Time.time < waitTime+1) {
 		alpha = Time.time - waitTime;
 		rend.enabled = true;
 		rend.material.color.a = alpha;
 	}
 	
-
-	if (Time.time > waitTime+1  && finishedRendering == false) {
+	// Switch to final material -- bldg dark or bldg light
+	if (Time.time > waitTime+1  && finishedRezIn == false) {
 		alpha = 1.0;
 		rend.material.color.a = alpha;
 		rend.material = finalMat; 	// works fine, just a bit too sudden.
-		finishedRendering = true;
+		finishedRezIn = true;
 	}
 	
+	
+/*	
+	// De-rez animation for end of level
+	if (Time.time > 15 + waitTime && !derezzed) {
+		rend.material = startMat;
+		rend.material.color.a = 16 - Time.time;
+	}
+	if (Time.time > 16 + waitTime) {
+		rend.enabled = false;
+		derezzed = true;
+	}
+*/
+		
 	/*
+	// CODE THAT DOES NOT WORK...
+	
 	// Problem: finalMat does not have emission
 	if (Time.time > waitTime+1) {
 		//rend.material.color.a = 1.0;  // causes light blocks to be dark ???
 		var lerp : float = Mathf.PingPong(Time.time, duration) / duration;
 		rend.material.Lerp(startMat, finalMat, lerp);
 	}
-	*/
-	
-	/*
-	// trying to change the emissive value does not work in any way/method
+
+	// Problem trying to change the emissive value does not work in any way/method
 	if (Time.time > waitTime && Time.time < waitTime+1) {
 		alpha = Time.time - waitTime;
 		//rend.material.color.a = alpha;  //cube starts out emitting full light.  it is transparent, then becomes opaque
