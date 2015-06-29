@@ -33,56 +33,60 @@ public class StartUpScript : MonoBehaviour {
 	
 	void Update () 
 	{
-		if (Input.GetMouseButtonDown(0) && !GameManager.GameStarted)
-		{	
-			// Start In
-			if (StartUpCount == 0)
-			{
-				anim.SetTrigger ("FadeIn");
-				StartUpCount = 1;
-			}
-			// Start Fade & HowTo In
-			else if (StartUpCount == 1)
-			{
-				anim.SetTrigger ("FadeOut");
-				StartUpCount  = 2;
-				MiddleScript.FadeIn();
-				LeftScript.FadeIn();
-				RightScript.FadeIn();
-				StartUpCount = 2;
-			}
-			// HowTo Out
-			else if (StartUpCount == 2)
-			{
-				MiddleScript.FadeOut();
-				LeftScript.FadeOut();
-				RightScript.FadeOut();
-				Invoke ("GameOn", 5);
-			}
-		}
 		//SKIP STARTUP MENU
 		if (Input.GetButtonDown("Jump"))
 		{
-		    StartUpCount = 3;   // directly skip animations
 			GameOn();
 			HowToMiddleObj.SetActive(false);
 			HowToLeftObj.SetActive(false);
 			HowToRightObj.SetActive(false);	
 		}
 		
-		if (Input.GetButton("Cancel"))
+		if (Input.GetMouseButtonDown(0))
 		{
-			Application.Quit();
+			UIStart();
 		}
 	}
+	public void UIQuit()
+	{
+		Application.Quit();
+	}
+	
+	public void UIStart()
+	{	
+		// Start In
+		if (StartUpCount == 0)
+		{
+			anim.SetTrigger ("FadeIn");
+			StartUpCount = 1;
+		}
+		// Start Fade & HowTo In
+		else if (StartUpCount == 1)
+		{
+			anim.SetTrigger ("FadeOut");
+			StartUpCount = 2;
+			MiddleScript.FadeIn();
+			LeftScript.FadeIn();
+			RightScript.FadeIn();
+		}
+		// HowTo Out
+		else if (StartUpCount == 2)
+		{
+			MiddleScript.FadeOut();
+			LeftScript.FadeOut();
+			RightScript.FadeOut();
+			Invoke ("GameOn", 5);
+		}
+	}
+	
 	
 	// Game Begins
 	void GameOn()
 	{
 		if (!gridMakerScript.InitializationStarted && !GameManager.GameStarted)
 		{
-		    GridScript.GameBegin();
-		    EnvScript.Activate();
+		GridScript.GameBegin();
+		EnvScript.Activate();
 		}
 	}
 }
