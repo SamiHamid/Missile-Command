@@ -118,7 +118,8 @@ public class GameManager : MonoBehaviour
 			Instantiate (_UIElements.RestartUI, new Vector3 (0.0f, 3.6f, -46f), Quaternion.identity);
             Debug.Log("LEVEL FINISHED: GAME LOST!");
 
-            // TODO: what happens when current level is lost?
+            // TODO: what happens when current level is lost? raycast - restart?
+            StartCoroutine(RestartLevel()); // restart level auto in 10 secs
         }
 
 	}
@@ -146,6 +147,22 @@ public class GameManager : MonoBehaviour
             // TODO: Game Over Code here
             Debug.Log("END OF LEVELS, GAME OVER!");
         }
+    }
+
+    IEnumerator RestartLevel()
+    {
+        // Wait for preparations
+        Debug.Log("Restarting level in 10...");
+        yield return new WaitForSeconds(10f);
+
+        // remove GameOver & Restart UI
+        Destroy(GameObject.Find("Restart(Clone)"));
+        Destroy(GameObject.Find("GameOver(Clone)"));
+
+        // restart current level
+        UpdateLevelVariables(_currentLevel);
+
+        _grid.GameBegin();
     }
 
     IEnumerator CleanUp()
