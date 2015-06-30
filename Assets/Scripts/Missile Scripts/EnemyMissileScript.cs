@@ -77,7 +77,8 @@ public class EnemyMissileScript : MonoBehaviour
     public void Detonate()
     {
         //Instantiate(_explosion, transform.position, Quaternion.identity);			// this effect is not used; does not look like "tron"
-        Destroy(gameObject);
+		Instantiate(_impactPoint, transform.position, Quaternion.identity);
+		Destroy(gameObject);
     }
 	
 }

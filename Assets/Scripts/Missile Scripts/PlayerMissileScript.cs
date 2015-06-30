@@ -9,6 +9,8 @@ public class PlayerMissileScript : MonoBehaviour
 	
 	// handles
     [SerializeField] private ParticleSystem _explosion;
+	[SerializeField] private GameObject _impactPoint;
+
 
     private Rigidbody rb;
 
@@ -39,7 +41,8 @@ public class PlayerMissileScript : MonoBehaviour
 
     private void Detonate()
     {
-        Instantiate(_explosion, transform.position, Quaternion.identity);
+		Instantiate(_impactPoint, transform.position , Quaternion.identity);
+		// Instantiate(_explosion, transform.position, Quaternion.identity);
         GetComponent<SphereCollider>().enabled = true;
         Destroy(gameObject, 0.2f);
     }
