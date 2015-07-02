@@ -5,7 +5,8 @@ public class StartUpScript : MonoBehaviour {
 
 	// StartUp Menu
 	private Animator anim;
-	private int StartUpCount = 0;
+	private float UIInitializeCounter = 0;
+	public GameObject GUI;
 	
 	// How To Menu 
 	public GameObject HowToMiddleObj;
@@ -15,11 +16,21 @@ public class StartUpScript : MonoBehaviour {
 	private HowToRight RightScript;
 	private HowToLeft LeftScript;
 	
+	// Credits
+	public GameObject Credits;
+	private CreditsScript CreditsScript;
+	
 	// Start Game
 	public GameObject Grid;
 	public GameObject EnvironmentUI;
 	private gridMakerScript GridScript;
 	private EnvironmentUIScript EnvScript;
+
+	// Particle System
+	public GameObject ParticleSystemObj;
+	
+	// Recticle
+	public GameObject Recticle;
 	
 	void Start () 
 	{
@@ -29,6 +40,7 @@ public class StartUpScript : MonoBehaviour {
 		RightScript = HowToRightObj.GetComponent<HowToRight>();
 		GridScript = Grid.GetComponent<gridMakerScript>();
 		EnvScript = EnvironmentUI.GetComponent<EnvironmentUIScript>();
+		CreditsScript = Credits.GetComponent<CreditsScript>();
 	}
 	
 	void Update () 
@@ -37,46 +49,54 @@ public class StartUpScript : MonoBehaviour {
 		if (Input.GetButtonDown("Jump"))
 		{
 			GameOn();
-			HowToMiddleObj.SetActive(false);
-			HowToLeftObj.SetActive(false);
-			HowToRightObj.SetActive(false);	
+			GUI.SetActive(false);
 		}
 		
-		if (Input.GetMouseButtonDown(0))
+		// Game GUI Initialization
+		if (Input.GetMouseButtonDown(0) && UIInitializeCounter == 0)
 		{
-			UIStart();
+			UIInitialize();
+			UIInitializeCounter = 1;
 		}
 	}
+
+	public void UIInitialize()
+	{
+		anim.SetTrigger ("FadeIn");
+	}
+
+	public void UIStart()
+	{
+		anim.SetTrigger ("FadeOut");
+		MiddleScript.FadeIn ();
+		LeftScript.FadeIn ();
+		RightScript.FadeIn ();
+	}
+	
+	public void UICredits()
+	{
+		CreditsScript.FadeIn();
+		anim.SetTrigger ("FadeOut");
+	}
+	
+	public void UICreditsBack()
+	{
+		anim.SetTrigger ("FadeIn");
+		CreditsScript.FadeOut();
+	}
+	
 	public void UIQuit()
 	{
 		Application.Quit();
 	}
 	
-	public void UIStart()
-	{	
-		// Start In
-		if (StartUpCount == 0)
-		{
-			anim.SetTrigger ("FadeIn");
-			StartUpCount = 1;
-		}
-		// Start Fade & HowTo In
-		else if (StartUpCount == 1)
-		{
-			anim.SetTrigger ("FadeOut");
-			StartUpCount = 2;
-			MiddleScript.FadeIn();
-			LeftScript.FadeIn();
-			RightScript.FadeIn();
-		}
-		// HowTo Out
-		else if (StartUpCount == 2)
-		{
-			MiddleScript.FadeOut();
-			LeftScript.FadeOut();
-			RightScript.FadeOut();
-			Invoke ("GameOn", 5);
-		}
+	public void UIHowTo()
+	{
+		MiddleScript.FadeOut();
+		LeftScript.FadeOut();
+		RightScript.FadeOut();
+		Invoke ("GameOn", 5);
+		Invoke ("DeactivateParticleRecticle", 2);
 	}
 	
 	
@@ -88,5 +108,12 @@ public class StartUpScript : MonoBehaviour {
 		GridScript.GameBegin();
 		EnvScript.Activate();
 		}
+	}
+
+	// Deactivate ParticleSystem
+	void DeactivateParticleRecticle()
+	{
+		ParticleSystemObj.SetActive (false);
+		Recticle.SetActive (false);
 	}
 }
