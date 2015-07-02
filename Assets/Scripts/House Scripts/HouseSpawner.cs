@@ -74,7 +74,7 @@ public class HouseSpawner : MonoBehaviour
         {
             Vector3 pos = RandomPosition();
 
-            GameObject house = Instantiate(_housePrefabs[Random.Range(0, 4)], pos, Quaternion.identity) as GameObject;
+            GameObject house = Instantiate(_housePrefabs[Random.Range(0, 3)], pos, Quaternion.identity) as GameObject;
             house.transform.parent = transform;             // move the instance to the parent object
             yield return new WaitForSeconds(_spawnDelay);
         }
