@@ -41,7 +41,7 @@ public class ColourChange : MonoBehaviour
 		{
 			DeActivate();
 			nextFire = Time.time + fireRate; 
-			Debug.Log(nextFire);
+			//Debug.Log(nextFire);
 		}
 	}
 

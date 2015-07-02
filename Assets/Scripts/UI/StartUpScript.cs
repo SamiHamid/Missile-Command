@@ -5,7 +5,7 @@ public class StartUpScript : MonoBehaviour {
 
 	// StartUp Menu
 	private Animator anim;
-	private float UIInitializeCounter = 0;
+	private int UIInitializeCounter = 0;
 	public GameObject GUI;
 	
 	// How To Menu 
@@ -53,17 +53,30 @@ public class StartUpScript : MonoBehaviour {
 		}
 		
 		// Game GUI Initialization
-		if (Input.GetMouseButtonDown(0) && UIInitializeCounter == 0)
+		if (Input.GetMouseButtonDown(0))
 		{
-			UIInitialize();
-			UIInitializeCounter = 1;
+		    switch (UIInitializeCounter)
+		    {
+                case 0:
+                    UIInitialize(); // Menu comes to face
+                    break;
+
+                case 1:
+		            UIStart();  // "How to" comes to face
+                    break;
+
+                case 2:
+		            UIHowTo();  // "how to" goes away and game starts
+                    break;
+		    }
 		}
 	}
 
 	public void UIInitialize()
 	{
 		anim.SetTrigger ("FadeIn");
-	}
+        UIInitializeCounter = 1;
+    }
 
 	public void UIStart()
 	{
@@ -71,6 +84,7 @@ public class StartUpScript : MonoBehaviour {
 		MiddleScript.FadeIn ();
 		LeftScript.FadeIn ();
 		RightScript.FadeIn ();
+	    UIInitializeCounter = 2;
 	}
 	
 	public void UICredits()
@@ -97,6 +111,7 @@ public class StartUpScript : MonoBehaviour {
 		RightScript.FadeOut();
 		Invoke ("GameOn", 5);
 		Invoke ("DeactivateParticleRecticle", 2);
+	    UIInitializeCounter = 3;
 	}
 	
 	
