@@ -25,9 +25,12 @@ public class StartUpScript : MonoBehaviour {
 	public GameObject EnvironmentUI;
 	private gridMakerScript GridScript;
 	private EnvironmentUIScript EnvScript;
+	public GameObject GamePlane;
 
 	// Particle System
 	public GameObject ParticleSystemObj;
+	public GameObject PlayerParticleSystem;
+	private PlayerParticles playerParticles;
 	
 	// Recticle
 	public GameObject Recticle;
@@ -109,8 +112,8 @@ public class StartUpScript : MonoBehaviour {
 		MiddleScript.FadeOut();
 		LeftScript.FadeOut();
 		RightScript.FadeOut();
-		Invoke ("GameOn", 5);
-		Invoke ("DeactivateParticleRecticle", 2);
+		Invoke ("GameOn", 8);
+		Invoke ("DeactivateParticleRecticle", 3.5f);
 	    UIInitializeCounter = 3;
 	}
 	
@@ -128,7 +131,11 @@ public class StartUpScript : MonoBehaviour {
 	// Deactivate ParticleSystem
 	void DeactivateParticleRecticle()
 	{
+		PlayerParticles playerParticles = PlayerParticleSystem.GetComponent<PlayerParticles>();
+		playerParticles.ToggleActive();
 		ParticleSystemObj.SetActive (false);
 		Recticle.SetActive (false);
+		GamePlane.SetActive (true);
+		playerParticles.ToggleActive();
 	}
 }
