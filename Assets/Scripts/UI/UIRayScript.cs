@@ -56,7 +56,7 @@ public class UIRayScript : MonoBehaviour
 				ColourScript.Activate();
 				
 				StartButton +=1;
-				if (StartButton >= 10)
+				if (StartButton >= 5)
 				{
 					Debug.Log("START ACTIVATED");
 					UIScript.UIStart();
@@ -71,7 +71,7 @@ public class UIRayScript : MonoBehaviour
 				ColourChange ColourScript = CreditsText.GetComponent<ColourChange>();
 				ColourScript.Activate();
 				CreditButton +=1;
-				if (CreditButton >= 10)
+				if (CreditButton >= 5)
 				{
 					Debug.Log("CREDITS ACTIVATED");
 					UIScript.UICredits();
@@ -87,7 +87,7 @@ public class UIRayScript : MonoBehaviour
 				ColourChange ColourScript = CreditsBackText.GetComponent<ColourChange>();
 				ColourScript.Activate();
 				CreditBackButton+=1;
-				if (CreditBackButton >=10)
+				if (CreditBackButton >=5)
 				{
 					Debug.Log("BACK ACTIVATED");
 					UIScript.UICreditsBack();
@@ -103,7 +103,7 @@ public class UIRayScript : MonoBehaviour
 				ColourChange ColourScript = QuitText.GetComponent<ColourChange>();
 				ColourScript.Activate();
 				QuitButton +=1;
-				if (QuitButton >= 10)
+				if (QuitButton >= 5)
 				{
 					Debug.Log("QUIT ACTIVATED");
 					UIScript.UIQuit();

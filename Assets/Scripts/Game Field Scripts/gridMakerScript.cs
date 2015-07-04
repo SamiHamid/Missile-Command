@@ -14,6 +14,7 @@ public class gridMakerScript : MonoBehaviour
 
     public Transform GameFieldPlane;
     public GameObject Background;
+    public GameObject BackgroundParticles;
 
     public HouseSpawner HouseSpawner;
 
@@ -58,6 +59,9 @@ public class gridMakerScript : MonoBehaviour
 	void BackgroundActivated()
 	{
 		Background.SetActive(true);
+		GameObject BackgroundParticles = GameObject.Find("BackgroundParticles");
+		ParticleScript particleScript = BackgroundParticles.GetComponent<ParticleScript>();
+		particleScript.ToggleActive();
 		Background.GetComponent<AudioSource>().Play();
 	}
 
