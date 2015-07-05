@@ -45,16 +45,18 @@ public class UIRayScript : MonoBehaviour
 		RaycastHit hitInfo;
 		Debug.Log("Firing");
 		
-		if (Physics.Raycast(rayOrigin, out hitInfo))
+		// how to use layer masks: http://answers.unity3d.com/questions/8715/how-do-i-use-layermasks.html
+		int layerMask = 1 << 5;	// UI is the 5th layer
+		if (Physics.Raycast(rayOrigin, out hitInfo, 100, layerMask))
 		{
 			Debug.Log("Hit Something");
 			Debug.DrawRay(transform.position, transform.forward, Color.green, 1);
 			
+			ColourChange ColourScript = hitInfo.collider.gameObject.GetComponentInChildren<ColourChange>();
+			ColourScript.Activate();
+			
 			if (hitInfo.collider.CompareTag("UIStart"))
 			{
-				ColourChange ColourScript = StartText.GetComponent<ColourChange>();
-				ColourScript.Activate();
-				
 				StartButton +=1;
 				if (StartButton >= 5)
 				{
@@ -62,14 +64,10 @@ public class UIRayScript : MonoBehaviour
 					UIScript.UIStart();
 					StartButton = 0;
 				}
-				CreditButton = 0;
-				QuitButton = 0;
 			}
 			
 			if (hitInfo.collider.CompareTag("UICredits"))
 			{
-				ColourChange ColourScript = CreditsText.GetComponent<ColourChange>();
-				ColourScript.Activate();
 				CreditButton +=1;
 				if (CreditButton >= 5)
 				{
@@ -77,15 +75,10 @@ public class UIRayScript : MonoBehaviour
 					UIScript.UICredits();
 					CreditButton =0;
 				}
-				StartButton = 0;
-				QuitButton = 0;
-				
 			}
 			
 			if (hitInfo.collider.CompareTag("UICreditsBack"))
 			{
-				ColourChange ColourScript = CreditsBackText.GetComponent<ColourChange>();
-				ColourScript.Activate();
 				CreditBackButton+=1;
 				if (CreditBackButton >=5)
 				{
@@ -93,32 +86,21 @@ public class UIRayScript : MonoBehaviour
 					UIScript.UICreditsBack();
 					CreditBackButton =0;
 				}
-				StartButton = 0;
-				QuitButton = 0;
-				CreditButton = 0;
 			}
 			
 			if (hitInfo.collider.CompareTag("UIQuit"))
 			{
-				ColourChange ColourScript = QuitText.GetComponent<ColourChange>();
-				ColourScript.Activate();
 				QuitButton +=1;
 				if (QuitButton >= 5)
 				{
 					Debug.Log("QUIT ACTIVATED");
 					UIScript.UIQuit();
 					QuitButton = 0;
-					
 				}
-				CreditButton = 0;
-				QuitButton = 0;
-				
 			}
 			
 			if (hitInfo.collider.CompareTag("UIGameOn"))
 			{
-				ColourChange ColourScript = GameOnText.GetComponent<ColourChange>();
-				ColourScript.Activate ();
 				GameOnButton +=1;
 				if (GameOnButton >= 5)
 				{
@@ -126,10 +108,64 @@ public class UIRayScript : MonoBehaviour
 					UIScript.UIHowTo();
 				}
 			}
-			else
-			{
-				GameOnButton = 0;
-			}
+			
+			ResetOthers(hitInfo.collider.tag);
+
+		}
+	}
+	
+	void ResetOthers(string exclude)
+	{
+		switch (exclude) 
+		{
+		case "UIStart":
+			CreditButton = 0;
+			CreditBackButton = 0;
+			QuitButton = 0;
+			GameOnButton = 0;
+			break;
+		case "UICredits":
+			StartButton = 0;
+			CreditBackButton = 0;
+			QuitButton = 0;
+			GameOnButton = 0;
+			break;
+		case "UICreditsBack":
+			StartButton = 0;
+			CreditButton = 0;
+			QuitButton = 0;
+			GameOnButton = 0;
+			break;
+		case "UIQuit":
+			StartButton = 0;
+			CreditButton = 0;
+			CreditBackButton = 0;
+			GameOnButton = 0;
+			break;
+		case "UIGameOn":
+			StartButton = 0;
+			CreditButton = 0;
+			CreditBackButton = 0;
+			QuitButton = 0;
+			break;
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
