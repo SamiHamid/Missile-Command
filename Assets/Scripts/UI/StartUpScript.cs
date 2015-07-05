@@ -83,11 +83,11 @@ public class StartUpScript : MonoBehaviour {
 
 	public void UIStart()
 	{
-		anim.SetTrigger ("FadeOut");
-		MiddleScript.FadeIn ();
-		LeftScript.FadeIn ();
-		RightScript.FadeIn ();
-	    UIInitializeCounter = 2;
+	   anim.SetTrigger ("FadeOut");
+	   MiddleScript.FadeIn ();
+	   LeftScript.FadeIn ();
+	   RightScript.FadeIn ();
+	   UIInitializeCounter = 2;
 	   GetComponent<AudioSource>().Play();
 	}
 	
