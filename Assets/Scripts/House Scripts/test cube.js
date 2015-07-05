@@ -28,6 +28,16 @@ function Start () {
 	
 }
 
+function RezIn()
+{
+
+}
+
+function RezOut()
+{
+
+}
+
 function Update () {
 
 	// Change alpha over time.  Does not effect emission.  Cubes change from transparent to opaque.

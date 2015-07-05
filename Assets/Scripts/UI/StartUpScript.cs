@@ -88,23 +88,27 @@ public class StartUpScript : MonoBehaviour {
 		LeftScript.FadeIn ();
 		RightScript.FadeIn ();
 	    UIInitializeCounter = 2;
+	   GetComponent<AudioSource>().Play();
 	}
 	
 	public void UICredits()
 	{
 		CreditsScript.FadeIn();
 		anim.SetTrigger ("FadeOut");
+		GetComponent<AudioSource>().Play();
 	}
 	
 	public void UICreditsBack()
 	{
 		anim.SetTrigger ("FadeIn");
 		CreditsScript.FadeOut();
+		GetComponent<AudioSource>().Play();
 	}
 	
 	public void UIQuit()
 	{
 		Application.Quit();
+		GetComponent<AudioSource>().Play();
 	}
 	
 	public void UIHowTo()
@@ -115,6 +119,7 @@ public class StartUpScript : MonoBehaviour {
 		Invoke ("GameOn", 8);
 		Invoke ("DeactivateParticleRecticle", 3.5f);
 	    UIInitializeCounter = 3;
+		GetComponent<AudioSource>().Play();
 	}
 	
 	
@@ -136,6 +141,16 @@ public class StartUpScript : MonoBehaviour {
 		ParticleSystemObj.SetActive (false);
 		Recticle.SetActive (false);
 		GamePlane.SetActive (true);
+		StartCoroutine ( VolumeFadeUp());
 		playerParticles.ToggleActive();
+	}
+	
+	IEnumerator VolumeFadeUp()
+	{
+		for ( int i = 0; i <= 5; i ++)
+		{
+			GamePlane.GetComponent<AudioSource>().volume = 0.1f * i; 
+			yield return new WaitForSeconds(0.5f);
+		}
 	}
 }

@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
 	{
 	    ReadLevelData();
 	    UpdateLevelVariables(_currentLevel);
+	    
+		//Screen.showCursor = false;
 	}
 
     private void ReadLevelData()
@@ -210,14 +212,11 @@ public class GameManager : MonoBehaviour
         // remove remaining houses
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("House"))
         {
+        
             Destroy(obj);
             yield return new WaitForSeconds(wait);
         }
     }
-
-
-
-
 }
 
 [Serializable]
