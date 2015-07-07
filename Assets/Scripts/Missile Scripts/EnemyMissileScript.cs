@@ -5,7 +5,6 @@ using Random = UnityEngine.Random;
 
 public class EnemyMissileScript : MonoBehaviour 
 {
-    [SerializeField] private ParticleSystem _explosion;
     [SerializeField] private GameObject _impactPoint;
 
     private Rigidbody rb;
@@ -18,6 +17,9 @@ public class EnemyMissileScript : MonoBehaviour
     void FixedUpdate()
     {
         // handle trajectory rotation -- rotate in accordance with the velocity
+        // for more explanation, see Section 4: Trajectory Rotation 
+        // @ http://vilbeyli.github.io/Simple-Trajectory-Motion-Example-Unity3D/
+
         transform.rotation = Quaternion.LookRotation(rb.velocity);
     }
 
@@ -34,10 +36,11 @@ public class EnemyMissileScript : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.transform.tag == "Ground")
+        if (other.transform.tag == "Ground" || other.transform.tag == "Player")
         {
             Detonate();
         }
+        
     }
 
     private void SwapHouses(GameObject house)
@@ -76,9 +79,13 @@ public class EnemyMissileScript : MonoBehaviour
 
     public void Detonate()
     {
-        //Instantiate(_explosion, transform.position, Quaternion.identity);			// this effect is not used; does not look like "tron"
 		Instantiate(_impactPoint, transform.position, Quaternion.identity);
 		Destroy(gameObject);
+    }
+
+    public void SetScoreData()
+    {
+        Debug.Log("SET SCORE DATA");
     }
 	
 }

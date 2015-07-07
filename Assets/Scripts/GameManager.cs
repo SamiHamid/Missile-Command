@@ -71,8 +71,8 @@ public class GameManager : MonoBehaviour
     }
 
     private void UpdateLevelVariables(int level)
-    {
-        int i = level - 1;
+    {                       // intervals
+        int i = level - 1;  // index: [0-i] | level: [1-level] | hence i=level-1
         Debug.Log("Updated Level Variables for Level " + LData[i].Level);
 
         _houseSpawner.HowManyHouses = LData[i].BuildingCount;

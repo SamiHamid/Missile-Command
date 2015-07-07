@@ -127,9 +127,10 @@ public class StartUpScript : MonoBehaviour {
 	void GameOn()
 	{
 		if (!gridMakerScript.InitializationStarted && !GameManager.GameStarted)
-		{
-		GridScript.GameBegin();
-		EnvScript.Activate();
+        {
+            GamePlane.SetActive(true);
+            GridScript.GameBegin();
+		    EnvScript.Activate();
 		}
 	}
 
