@@ -9,5 +9,5 @@ function Update () {
 	transform.position = myMissile.transform.position;
 	transform.position.y = 0.5;
 	transform.rotation = Quaternion.identity;
-	transform.localScale.y = 0.25 * myMissile.transform.position.y;
+	transform.localScale.y = 0.125 * myMissile.transform.position.y;
 }
