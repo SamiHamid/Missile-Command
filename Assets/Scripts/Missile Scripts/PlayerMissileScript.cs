@@ -8,7 +8,6 @@ public class PlayerMissileScript : MonoBehaviour
     // Variable Declarations
 	
 	// handles
-    [SerializeField] private ParticleSystem _explosion;
 	[SerializeField] private GameObject _impactPoint;
 
 
@@ -42,7 +41,6 @@ public class PlayerMissileScript : MonoBehaviour
     private void Detonate()
     {
 		Instantiate(_impactPoint, transform.position , Quaternion.identity);
-		// Instantiate(_explosion, transform.position, Quaternion.identity);
         GetComponent<SphereCollider>().enabled = true;
         Destroy(gameObject, 0.2f);
     }
@@ -52,6 +50,7 @@ public class PlayerMissileScript : MonoBehaviour
         if (other.tag == "Enemy Missile")
         {
             //Debug.Log("COLLIDING WITH ENEMY MISSILE");
+            other.GetComponent<EnemyMissileScript>().CalculateScore();
             other.GetComponent<EnemyMissileScript>().Detonate();
         }
     }

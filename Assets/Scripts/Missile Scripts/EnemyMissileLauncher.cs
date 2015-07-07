@@ -103,6 +103,7 @@ public class EnemyMissileLauncher : MonoBehaviour {
                                        (1f/missile.transform.localScale.x);
         // finally, set the initial velocity of the missile - LAUNCH THE BABY
         missile.GetComponent<Rigidbody>().velocity = Local2GlobalVelocity;
+        missile.GetComponent<EnemyMissileScript>().SetScoreData(_cannonPosition, _targetPosition);
 
         // update the missile count
         _missileCount--;

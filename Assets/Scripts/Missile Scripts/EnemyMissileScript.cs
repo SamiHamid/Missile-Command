@@ -7,6 +7,9 @@ public class EnemyMissileScript : MonoBehaviour
 {
     [SerializeField] private GameObject _impactPoint;
 
+    private Vector2 _source, _destination;
+    private float _score;
+
     private Rigidbody rb;
 
     void Start()
@@ -28,7 +31,7 @@ public class EnemyMissileScript : MonoBehaviour
 
         if (other.tag == "House")
         {
-            SpawnSharpnel(other.transform.position);
+            //SpawnSharpnel(other.transform.position);
             Detonate();
             SwapHouses(other.transform.gameObject);
         }
@@ -36,11 +39,31 @@ public class EnemyMissileScript : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.transform.tag == "Ground" || other.transform.tag == "Player")
+        if (other.transform.tag == "Player")
+        {
+            Debug.Log("Enemy missile hits the explosion bubble");
+            CalculateScore();
+            Detonate();
+        }
+
+        if (other.transform.tag == "Ground")
         {
             Detonate();
         }
         
+    }
+
+    public void CalculateScore()
+    {
+        Vector2 currentPos = new Vector2(transform.position.x, transform.position.z);
+
+        float initialDistance = Vector2.Distance(_source, _destination);
+        float traveledDistance = Vector2.Distance(currentPos, _destination);
+
+        _score = (initialDistance/traveledDistance)*100;
+        GameObject.FindObjectOfType<GameManager>().AccumulateLevelScore(_score);
+
+        Debug.Log("Score Yielded: " + _score + "\nInitial Distance: " + initialDistance + "\nTraveled Distance: " + traveledDistance);
     }
 
     private void SwapHouses(GameObject house)
@@ -74,7 +97,7 @@ public class EnemyMissileScript : MonoBehaviour
 
         // sharpnel spawn position          // add some height to sharpnel pos
         Vector3 pos = HPos + displacement + new Vector3(0f, 2f, 0f);
-        Instantiate(_impactPoint, pos, Quaternion.identity);
+        //Instantiate(_impactPoint, pos, Quaternion.identity);
     }
 
     public void Detonate()
@@ -83,9 +106,10 @@ public class EnemyMissileScript : MonoBehaviour
 		Destroy(gameObject);
     }
 
-    public void SetScoreData()
+    public void SetScoreData(Vector3 source, Vector3 destination)
     {
-        Debug.Log("SET SCORE DATA");
+        _source = new Vector2(source.x, source.z);
+        _destination = new Vector2(destination.x, destination.z);
     }
 	
 }

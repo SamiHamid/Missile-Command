@@ -5,31 +5,38 @@ using System.IO;
 
 public class GameManager : MonoBehaviour
 {
+    //----------------------------------------------------------------------------------------------
+    // Variables
 
+    // static
     public static bool GameStarted = false;     // missiles start to launch after GameStarted = true;
 
+    // handles
     [SerializeField] private UIManager _UI;
     [SerializeField] private HouseSpawner _houseSpawner;
     [SerializeField] private EnemyMissileLauncher _missileLauncher;
     [SerializeField] private PlayerScript _player;
-
     [SerializeField] private gridMakerScript _grid;
     
     //GUI
     [SerializeField] private UIElements _UIElements;
    
-    
+    // level variables
     [SerializeField] private int _currentLevel;    // 1 - 10
-
     private LevelData[] LData;
 
-	// Use this for initialization
+    // score variables
+    private float _playerScore;     // score the player actually has
+    private float _levelScore;      // score gained at that level
+
+	//----------------------------------------------------------------------------------------------
+    // Function Definitions
 	void Start ()
 	{
 	    ReadLevelData();
 	    UpdateLevelVariables(_currentLevel);
 	    
-		//Screen.showCursor = false;
+		//Screen.showCursor = false;  // obsolete, check for a newer way to do it, should be pretty ez.
 	}
 
     private void ReadLevelData()
@@ -45,6 +52,7 @@ public class GameManager : MonoBehaviour
         // Level, #EMissileCount, EMissilePeriod, EMissileSpeed, #EnemyBugs, #PMissiles, #SupplyCrate, #Building, %Building2Win
         var line = file.ReadLine();
 
+        // index counter
         int i = 0;
 
         // read the actual data
@@ -90,14 +98,8 @@ public class GameManager : MonoBehaviour
         _UI.UpdateEnemyMissileUI(_missileLauncher.MissileCount);
         _UI.UpdatePlayerMissileUI(_player.MissileCount);
         _UI.UpdateBuildingCountText(_houseSpawner.HowManyHouses);
-        // TODO: Score Text Update Function
+        _UI.UpdateScore(_playerScore); 
     }
-
-    // Update is called once per frame
-	void Update () 
-    {
-	
-	}
 
 
     public void LevelFinished()
@@ -109,6 +111,7 @@ public class GameManager : MonoBehaviour
         if (buildingPct > LData[_currentLevel - 1].PctToWin)
         {
             Debug.Log("LEVEL FINISHED: GAME WON!");
+            _playerScore += _levelScore;   // update the player's score
 			Instantiate(_UIElements.WinUI, new Vector3 (0.0f, 26.6f, 39.6f), Quaternion.identity);
 
             StartCoroutine(AdvanceNextLevel());
@@ -124,7 +127,16 @@ public class GameManager : MonoBehaviour
             StartCoroutine(RestartLevel()); // restart level auto in 10 secs
         }
 
-	}
+        // reset the score gained at that level
+        _levelScore = 0;
+
+    }
+
+    public void AccumulateLevelScore(float score)
+    {
+        _levelScore += score;
+        _UI.UpdateScore(_playerScore + _levelScore);
+    }
 
     IEnumerator AdvanceNextLevel()
     {

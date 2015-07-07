@@ -50,4 +50,9 @@ public class UIManager : MonoBehaviour
         _buildingsLeft--;
         BuildingCountText.text = "CITIES LEFT: " + _buildingsLeft;
     }
+
+    public void UpdateScore(float score)
+    {
+        ScoreText.text = "SCORE: " + ((int) score).ToString();
+    }
 }
