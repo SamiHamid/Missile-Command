@@ -17,6 +17,7 @@ public class StartUpScript : MonoBehaviour {
 	private HowtoScript MiddleScript;
 	private HowToRight RightScript;
 	private HowToLeft LeftScript;
+	private bool DemoFire;
 	
 	// Credits
 	public GameObject Credits;
@@ -34,6 +35,10 @@ public class StartUpScript : MonoBehaviour {
 	public GameObject PlayerParticleSystem;
 	private PlayerParticles playerParticles;
 	
+	// Shoot Missiles
+	public GameObject Player;
+	private PlayerScript PlayerScriptHere;
+	
 	// Recticle
 	public GameObject Recticle;
 	
@@ -46,6 +51,7 @@ public class StartUpScript : MonoBehaviour {
 		GridScript = Grid.GetComponent<gridMakerScript>();
 		EnvScript = EnvironmentUI.GetComponent<EnvironmentUIScript>();
 		CreditsScript = Credits.GetComponent<CreditsScript>();
+		PlayerScriptHere = Player.GetComponent<PlayerScript>();
 	}
 	
 	void Update () 
@@ -60,12 +66,17 @@ public class StartUpScript : MonoBehaviour {
 		// Game GUI Initialization
 		if (Input.GetMouseButtonDown(0) && DisableMouseInput == false)
 		{
-			if (OVRHealthScreen == true)
+			if (OVRHealthScreen == true && DemoFire == false)
 			{
 				UIInitialize();
 				DisableMouseInput = true;
 			}
 			OVRHealthScreen = true;
+			
+			if (Input.GetMouseButtonDown(0) && DemoFire == true)
+			{
+				PlayerScriptHere.ShootMissileUI();
+			}
 		}
 	}
 
@@ -82,7 +93,9 @@ public class StartUpScript : MonoBehaviour {
 		LeftScript.FadeIn ();
 		RightScript.FadeIn ();
 	    UIInitializeCounter = 2;
-	   GetComponent<AudioSource>().Play();
+	    DemoFire = true;
+	    DisableMouseInput = false;
+	    GetComponent<AudioSource>().Play();
 	}
 	
 	public void UICredits()
@@ -112,6 +125,8 @@ public class StartUpScript : MonoBehaviour {
 		RightScript.FadeOut();
 		Invoke ("GameOn", 8);
 		Invoke ("DeactivateParticleRecticle", 3.5f);
+		DemoFire = false;
+		DisableMouseInput = true;
 	    UIInitializeCounter = 3;
 		GetComponent<AudioSource>().Play();
 	}

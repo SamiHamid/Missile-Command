@@ -14,6 +14,9 @@ public class PlayerScript : MonoBehaviour
 
     // editor variables
     [SerializeField] private float force;
+    
+    //UI Missile
+    public GameObject UIMissile;
 
 
     private int _missileCount;
@@ -43,7 +46,7 @@ public class PlayerScript : MonoBehaviour
 	}
 
 
-    private void ShootMissile()
+    public void ShootMissile()
     {
         GameObject missile =
             Instantiate(_playerMissile, _playerMissileShooter.position, Quaternion.identity) as GameObject;
@@ -52,6 +55,14 @@ public class PlayerScript : MonoBehaviour
 
         _missileCount--;
         _managers.UI.UpdatePlayerMissileUI(_missileCount);
+    }
+    
+    public void ShootMissileUI()
+    {
+		GameObject missile =
+			Instantiate(UIMissile, _playerMissileShooter.position, Quaternion.identity) as GameObject;
+		
+		missile.GetComponent<Rigidbody>().velocity = _playerMissileShooter.forward * force;
     }
 
 

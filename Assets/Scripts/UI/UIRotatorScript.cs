@@ -15,9 +15,9 @@ public class UIRotatorScript : MonoBehaviour {
 	
 	void Update () 
 	{
-		float X = 0.0f * XrotationsPerMinute * Time.deltaTime;
+		float X = 5.0f * XrotationsPerMinute * Time.deltaTime;
 		float Y = 5.0f * YrotationsPerMinute * Time.deltaTime;
-		float Z = 0.0f * ZrotationsPerMinute * Time.deltaTime;
+		float Z = 5.0f * ZrotationsPerMinute * Time.deltaTime;
 		transform.Rotate(X,Y,Z);
 	}
 

@@ -20,4 +20,6 @@ public class HowtoScript : MonoBehaviour {
 	{
 		anim.SetTrigger ("FadeOut");
 	}
+
+	
 }
