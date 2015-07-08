@@ -12,10 +12,6 @@ public class ParticleScript : MonoBehaviour {
 	
 	void Update () 
 	{
-		if (Input.GetKeyDown(KeyCode.A))
-		{
-			ToggleActive();
-		}
 	}
 	
 	public void ToggleActive()
