@@ -7,6 +7,8 @@ public class StartUpScript : MonoBehaviour {
 	private Animator anim;
 	private int UIInitializeCounter = 0;
 	public GameObject GUI;
+	private bool OVRHealthScreen;
+	private bool DisableMouseInput;
 	
 	// How To Menu 
 	public GameObject HowToMiddleObj;
@@ -56,22 +58,14 @@ public class StartUpScript : MonoBehaviour {
 		}
 		
 		// Game GUI Initialization
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0) && DisableMouseInput == false)
 		{
-		    switch (UIInitializeCounter)
-		    {
-                case 0:
-                    UIInitialize(); // Menu comes to face
-                    break;
-
-                case 1:
-		            UIStart();  // "How to" comes to face
-                    break;
-
-                case 2:
-		            UIHowTo();  // "how to" goes away and game starts
-                    break;
-		    }
+			if (OVRHealthScreen == true)
+			{
+				UIInitialize();
+				DisableMouseInput = true;
+			}
+			OVRHealthScreen = true;
 		}
 	}
 

@@ -106,6 +106,7 @@ public class UIRayScript : MonoBehaviour
 				{
 					Debug.Log("GAMEON ACTIVATED");
 					UIScript.UIHowTo();
+					GameOnButton = 0;
 				}
 			}
 			
