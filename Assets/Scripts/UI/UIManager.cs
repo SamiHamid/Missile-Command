@@ -12,18 +12,6 @@ public class UIManager : MonoBehaviour
 
     private int _buildingsLeft;
 
-	// Use this for initialization
-	void Start () 
-    {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () 
-    {
-	
-	}
-
     public void UpdateEnemyMissileUI(int count)
     {
         EnemyMissileCountText.text = "ENEMY MISSILE COUNT: " + count;

@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static bool GameStarted = false;     // missiles start to launch after GameStarted = true;
 
     // handles
-    [SerializeField] private UIManager _UI;
+    [SerializeField] private UIManager _UIManager;
     [SerializeField] private HouseSpawner _houseSpawner;
     [SerializeField] private EnemyMissileLauncher _missileLauncher;
     [SerializeField] private PlayerScript _player;
@@ -94,11 +94,11 @@ public class GameManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        _UI.UpdateLevelText(_currentLevel);
-        _UI.UpdateEnemyMissileUI(_missileLauncher.MissileCount);
-        _UI.UpdatePlayerMissileUI(_player.MissileCount);
-        _UI.UpdateBuildingCountText(_houseSpawner.HowManyHouses);
-        _UI.UpdateScore(_playerScore); 
+        _UIManager.UpdateLevelText(_currentLevel);
+        _UIManager.UpdateEnemyMissileUI(_missileLauncher.MissileCount);
+        _UIManager.UpdatePlayerMissileUI(_player.MissileCount);
+        _UIManager.UpdateBuildingCountText(_houseSpawner.HowManyHouses);
+        _UIManager.UpdateScore(_playerScore); 
     }
 
 
@@ -107,11 +107,11 @@ public class GameManager : MonoBehaviour
 		float buildingPct = 100 * ((float)_houseSpawner.transform.childCount / (float)LData[_currentLevel-1].BuildingCount);
 		Debug.Log ("Buildings Left: " + _houseSpawner.transform.childCount + "\tInitiallty: " + LData[_currentLevel-1].BuildingCount + "\nbuildings left %: " + buildingPct);
 
-        StartCoroutine(CleanUp());  // start the cleanup
+        StartCoroutine(CleanUp());      // start the cleanup
+        _playerScore += _levelScore;    // update the player's score
         if (buildingPct > LData[_currentLevel - 1].PctToWin)
         {
             Debug.Log("LEVEL FINISHED: GAME WON!");
-            _playerScore += _levelScore;   // update the player's score
 			Instantiate(_UIElements.WinUI, new Vector3 (0.0f, 26.6f, 39.6f), Quaternion.identity);
 
             StartCoroutine(AdvanceNextLevel());
@@ -120,11 +120,10 @@ public class GameManager : MonoBehaviour
         else
         {
 			Instantiate(_UIElements.LoseUI, new Vector3 (0.05f, 26.8f, 45.4f), Quaternion.identity);
-			Instantiate (_UIElements.RestartUI, new Vector3 (0.0f, 3.6f, -46f), Quaternion.identity);
             Debug.Log("LEVEL FINISHED: GAME LOST!");
-
-            // TODO: what happens when current level is lost? raycast - restart?
-            StartCoroutine(RestartLevel()); // restart level auto in 10 secs
+            
+            //StartCoroutine(RestartLevel()); // restart level auto in 10 secs
+            StartCoroutine(ShowScores());
         }
 
         // reset the score gained at that level
@@ -135,7 +134,7 @@ public class GameManager : MonoBehaviour
     public void AccumulateLevelScore(float score)
     {
         _levelScore += score;
-        _UI.UpdateScore(_playerScore + _levelScore);
+        _UIManager.UpdateScore(_playerScore + _levelScore);
     }
 
     IEnumerator AdvanceNextLevel()
@@ -158,7 +157,7 @@ public class GameManager : MonoBehaviour
         else
         {
             // if last level is finished, USE GAME OVER SCREEN
-            // TODO: Game Over Code here
+            // TODO: Game Over screen here
             Debug.Log("END OF LEVELS, GAME OVER!");
         }
     }
@@ -170,7 +169,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(10f);
 
         // remove GameOver & Restart UI
-        Destroy(GameObject.Find("Restart(Clone)"));
         Destroy(GameObject.Find("GameOver(Clone)"));
 
         // restart current level
@@ -178,6 +176,30 @@ public class GameManager : MonoBehaviour
 
         _grid.GameBegin();
     }
+
+    private IEnumerator ShowScores()
+    {
+        // initially wait 8 seconds for clean up
+        yield return new WaitForSeconds(8f);
+
+        // remove GameOver UI element
+        Destroy(GameObject.Find("GameOver(Clone)"));
+
+        // show High Scores
+        Instantiate(_UIElements.ScoresUI, new Vector3(0.05f, 26.8f, 45.4f), Quaternion.identity);
+        // TODO: Edit ScoresUI fields to match the highscores and names
+        // TODO: Instantiate/put a Back Button to Application.LoadLevel(0);
+
+        // check if the player score is a high score
+        if (GetComponent<ScoreManager>().IsHighScore((int)_playerScore))
+        {
+            // enable input: show the letters | otherwise show only the scores (by default)   
+            GameObject.FindGameObjectWithTag("UIHighScores").transform.FindChild("Alphabet").gameObject.SetActive(true);
+
+            // TODO: Interaction of HighScores - Save the current score
+        }
+    }
+
 
     IEnumerator CleanUp()
     {
@@ -237,6 +259,7 @@ public class UIElements
     [SerializeField] private GameObject _loseUI;
     [SerializeField] private GameObject _restartUI;
     [SerializeField] private GameObject _winUI;
+    [SerializeField] private GameObject _scoresUI;
 
     public GameObject LoseUI
     {
@@ -251,6 +274,11 @@ public class UIElements
     public GameObject WinUI
     {
         get { return _winUI; }
+    }
+
+    public GameObject ScoresUI
+    {
+        get { return _scoresUI; }
     }
 }
 

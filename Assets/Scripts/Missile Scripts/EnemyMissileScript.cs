@@ -58,7 +58,7 @@ public class EnemyMissileScript : MonoBehaviour
         Vector2 currentPos = new Vector2(transform.position.x, transform.position.z);
 
         float initialDistance = Vector2.Distance(_source, _destination);
-        float traveledDistance = Vector2.Distance(currentPos, _destination);
+        float traveledDistance = Vector2.Distance(currentPos, _source);
 
         _score = (initialDistance/traveledDistance)*100;
         GameObject.FindObjectOfType<GameManager>().AccumulateLevelScore(_score);
@@ -98,7 +98,7 @@ public class EnemyMissileScript : MonoBehaviour
         // sharpnel spawn position          // add some height to sharpnel pos
         Vector3 pos = HPos + displacement + new Vector3(0f, 2f, 0f);
         //Instantiate(_impactPoint, pos, Quaternion.identity);
-    }
+    }   // NOT USED ANYMORE
 
     public void Detonate()
     {

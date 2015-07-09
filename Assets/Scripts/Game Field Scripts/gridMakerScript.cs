@@ -35,7 +35,8 @@ public class gridMakerScript : MonoBehaviour
 	{
 	    InitializationStarted = true;       // condition is checked in caller function of gameBegin()
 		StartCoroutine(GenerateGrid());
-	}
+        StartCoroutine(GenerateGridZ());
+    }
 	
 	// Field Bars
 	IEnumerator GenerateGrid()
@@ -53,6 +54,27 @@ public class gridMakerScript : MonoBehaviour
 		
         BackgroundActivated();
         HouseSpawner.StartSpawningHouses();
+    }
+
+    IEnumerator GenerateGridZ()
+    {   // wait for half the waitLength for the opposite phase
+        // so that the grid generation goes X, Z, X, Z...
+        yield return new WaitForSeconds(0.05f); 
+
+        GameObject GridZ = GameObject.Find("GridZ");
+
+        Vector3 startingPos = GameFieldPlane.position - new Vector3(5 * GameFieldPlane.localScale.x, 0, 0);
+
+        for (int i = 0; i < NumberOfLines + 1; i++)
+        {
+            float xLoc = startingPos.x + i * _lineSpacing;     // Adjust X for spacing on each iteration
+            GameObject instance = Instantiate(FieldBar, new Vector3(xLoc, 0.2f, 40f), Quaternion.Euler(new Vector3(0, 90, 90))) as GameObject;
+
+            if (instance != null) instance.transform.parent = GridZ.transform;    // move instantiated objects under the gridMaker object
+
+            GetComponent<AudioSource>().Play();
+            yield return new WaitForSeconds(WaitLength);
+        }
     }
 	
 	// Background
