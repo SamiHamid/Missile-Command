@@ -41,7 +41,7 @@ public class gridMakerScript : MonoBehaviour
 	// Field Bars
 	IEnumerator GenerateGrid()
 	{
-		for (int i=0; i<NumberOfLines; i++)
+		for (int i=0; i<NumberOfLines+1; i++)
 		{
             float zLoc = _startingPosition.z + i * _lineSpacing;     // Adjust Z for spacing on each iteration
 			GameObject instance = Instantiate(FieldBar, new Vector3 (0, 0.2f, zLoc), Quaternion.Euler(new Vector3(0, 0, 90))) as GameObject;

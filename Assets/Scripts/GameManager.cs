@@ -208,7 +208,21 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         StartCoroutine(RemoveHouses());
         StartCoroutine(RemoveGrid());
+        StartCoroutine(RemoveGridZ());
         MoveBullsEye();
+    }
+
+    private IEnumerator RemoveGridZ()
+    {
+        float wait = 0.25f;
+        GameObject grid = GameObject.Find("GridZ");
+        yield return new WaitForSeconds(wait/2);
+
+        for (int i = grid.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(grid.transform.GetChild(i).gameObject);
+            yield return new WaitForSeconds(wait);
+        }
     }
 
     private void MoveBullsEye()
@@ -227,8 +241,6 @@ public class GameManager : MonoBehaviour
             Destroy(_grid.transform.GetChild(i).gameObject);
             yield return new WaitForSeconds(wait);
         }
-
-
     }
 
     IEnumerator RemoveHouses()
