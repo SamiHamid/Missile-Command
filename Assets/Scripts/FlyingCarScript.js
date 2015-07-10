@@ -2,7 +2,8 @@
 var startPos : Vector3;
 var endPos : Vector3;
 private var rb : Rigidbody;
-var exhaust : GameObject;
+//var exhaust : GameObject;
+var exhaust : ParticleSystem;
 var force : float = 15;
 
 function Start () {
@@ -15,7 +16,8 @@ function Start () {
 	endPos.z = startPos.z + Random.Range(-10, 10);
 	//endPos.y = 1000;
 	rb = GetComponent.<Rigidbody>();
-	exhaust.SetActive (false);
+	//exhaust.SetActive (false);
+	exhaust.Stop();
 }
 
 function Update () {
@@ -24,12 +26,12 @@ function Update () {
 		// move car Y-axis
 		if (transform.position.y < endPos.y) {
 			rb.AddRelativeForce(transform.up * force);
-			if (exhaust.activeSelf == false) {
-				exhaust.SetActive (true);
+			if (exhaust.isPlaying == false) {
+				exhaust.Play();
 			}
 		} else {
-			if (exhaust.activeSelf == true) {
-				exhaust.SetActive (false);
+			if (exhaust.isPlaying == true) {
+				exhaust.Stop();
 				rb.AddRelativeForce(transform.up * force * 0.5);
 			}
 		}
