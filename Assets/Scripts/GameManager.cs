@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EnemyMissileLauncher _missileLauncher;
     [SerializeField] private PlayerScript _player;
     [SerializeField] private gridMakerScript _grid;
+    [SerializeField] private GameObject _recticle;
     
     //GUI
     [SerializeField] private UIElements _UIElements;
@@ -159,6 +160,8 @@ public class GameManager : MonoBehaviour
             // if last level is finished, USE GAME OVER SCREEN
             // TODO: Game Over screen here
             Debug.Log("END OF LEVELS, GAME OVER!");
+            
+			StartCoroutine(ShowScores());
         }
     }
 
@@ -181,15 +184,17 @@ public class GameManager : MonoBehaviour
     {
         // initially wait 8 seconds for clean up
         yield return new WaitForSeconds(8f);
+        
+        // activate the dot (pointer)
+        _recticle.SetActive(true);
 
         // remove GameOver UI element
         Destroy(GameObject.Find("GameOver(Clone)"));
+		GameObject.Find("EnvironmentUI").SetActive(false);
 
         // show High Scores
-		GameObject HighScoresUI = Instantiate(_UIElements.ScoresUI, new Vector3(0.05f, 26.8f, 45.4f), Quaternion.identity) as GameObject;
+		GameObject HighScoresUI = Instantiate(_UIElements.ScoresUI, new Vector3(0.05f, 31f, 1.5f), Quaternion.identity) as GameObject;
 		GetComponent<ScoreManager> ().UpdateScoresUI ();
-
-        // TODO: Instantiate/put a Back Button to Application.LoadLevel(0);
 
         // check if the player score is a high score
         if (GetComponent<ScoreManager>().IsHighScore((int)_playerScore))
@@ -198,8 +203,8 @@ public class GameManager : MonoBehaviour
             // enable input: show the letters | otherwise show only the scores (by default)   
 			HighScoresUI.transform.FindChild("Alphabet").gameObject.SetActive(true);
 
-            // TODO: Interaction of HighScores - Save the current score
 			GetComponent<ScoreManager>().HighLightNewScore((int)_playerScore);
+			
         }
     }
 

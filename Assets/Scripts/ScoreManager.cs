@@ -6,10 +6,16 @@ public class ScoreManager : MonoBehaviour
 {
 	private List<HighScore> _scores;
 
+	private string _highScoreName;
+	private int _highScoreValue;
+	private Transform _highScoreRow;
+	
+	private bool isSaved;
 
     void Start ()
 	{
-		Time.timeScale = 8;	// TODO: REMOVE THIS SHIT \\ also hide player score from editor later
+		//ResetScores();
+		_highScoreName = "";
 
 		// allocate the high score list
 		_scores = new List<HighScore> ();
@@ -38,14 +44,18 @@ public class ScoreManager : MonoBehaviour
 
     private void PutDummyScores()
     {
-		int baseScore = 3000;
+		PlayerPrefs.SetInt("Score1", 3000);
+		PlayerPrefs.SetInt("Score2", 2750);
+		PlayerPrefs.SetInt("Score3", 2500);
+		PlayerPrefs.SetInt("Score4", 2250);
+		PlayerPrefs.SetInt("Score5", 2000);
+		
+		PlayerPrefs.SetString("Name1", "VOL");
+		PlayerPrefs.SetString("Name2", "SAM");
+		PlayerPrefs.SetString("Name3", "ADW");
+		PlayerPrefs.SetString("Name4", "KBY");
+		PlayerPrefs.SetString("Name5", "ZAD");
 
-		for(int i=0; i<5; i++)
-		{
-			int offset = 250*i;
-			PlayerPrefs.SetInt("Score" + (i+1), baseScore - offset);  
-			PlayerPrefs.SetString("Name" + (i+1), "DUM");
-		}
 
 		PlayerPrefs.SetInt("scoresSet", 1);
     }
@@ -63,6 +73,7 @@ public class ScoreManager : MonoBehaviour
 		Debug.Log ("Comparing score " + score + " to " + _scores[4].Score + "\tResult: " + (score > _scores[4].Score));
 		PrintScores ();
         return score > _scores[4].Score;
+
     }
 
 	public void UpdateScoresUI()
@@ -82,6 +93,8 @@ public class ScoreManager : MonoBehaviour
 
 	public void HighLightNewScore(int newScore)
 	{
+		_highScoreValue = newScore;
+	
 		// find the index of the new score
 		int index = 4;
 		for (int i=0; i<5; i++)
@@ -94,7 +107,7 @@ public class ScoreManager : MonoBehaviour
 		}
 
 		// update the list				// insert the new score
-		_scores.Insert (index, new HighScore(newScore, "..."));
+		_scores.Insert (index, new HighScore(newScore, "XXX"));
 		_scores.RemoveAt (5);	// remove the old score
 
 		PrintScores();
@@ -116,6 +129,7 @@ public class ScoreManager : MonoBehaviour
 				}
 
 				// break the loop
+				_highScoreRow = entry;
 				break;
 			}
 		}
@@ -131,6 +145,68 @@ public class ScoreManager : MonoBehaviour
 		}
 
 		Debug.Log (scoresStr);
+	}
+
+	public void TypeLetter(string letter)
+	{
+	
+		if(_highScoreName.Length < 3)
+			_highScoreName += letter;
+			
+		Debug.Log ("Type letter " + letter + "\t" + _highScoreName);
+		RefreshLetterOnUI();
+	}
+	
+	public void DeleteLetter()
+	{
+		// DELETE DOESNT WORK???
+		if(!isSaved)
+		{
+			if(_highScoreName.Length != 0)
+			{
+				//Debug.Log ("WAT?");
+				//_highScoreName.Remove(_highScoreName.Length-1);
+				_highScoreName = "";
+			}	
+		
+			Debug.Log ("Delete Letter" + "\t" + _highScoreName);
+			
+			RefreshLetterOnUI();
+		}
+	}
+
+	public void Submit()
+	{
+		if(!isSaved){
+			Debug.Log ("Submit Score" + "\t" + _highScoreName + " " + _highScoreValue);
+			
+			// update the name of the new highscore
+			for(int i=0; i<5; i++)
+			{
+				if(_scores[i].Score == _highScoreValue)
+				{
+					_scores[i].Name = _highScoreName;
+			 	} 
+			}
+			
+			// update the values in the database
+			for(int i=0; i<5; i++)
+			{
+				PlayerPrefs.SetInt("Score" + (i+1), _scores[i].Score);
+				PlayerPrefs.SetString("Name" + (i+1), _scores[i].Name);	
+			}
+			
+			
+			isSaved = true;
+			
+			// TODO: make main menu go green
+			 
+		}
+	}
+	
+	void RefreshLetterOnUI()
+	{
+		_highScoreRow.FindChild("Name").GetComponent<TextMesh>().text = _highScoreName;
 	}
 
 }

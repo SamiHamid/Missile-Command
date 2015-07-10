@@ -25,13 +25,11 @@ public class ColourChange : MonoBehaviour
 		{
 			currentColor = transform.GetComponent<TextMesh> ().color = Color.Lerp (col, startColor, blendValue);
 			blendValue -= Time.deltaTime * 0.65f;
-			Debug.Log(blendValue);
-
+		
 		} else if (blendValue < 1 && GoBool == false)
 		{
 			transform.GetComponent<TextMesh>().color = Color.Lerp (currentColor, startColor, blendValue);
 			blendValue += Time.deltaTime * 0.65f;
-			Debug.Log(blendValue);
 		}
 
 		// Colour Changer

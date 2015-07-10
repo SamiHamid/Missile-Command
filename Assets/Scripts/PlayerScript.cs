@@ -34,7 +34,7 @@ public class PlayerScript : MonoBehaviour
     // unity functions	
 	void Start () 
     {
-
+		Cursor.visible = false;
 	}
 	
 	void Update () 

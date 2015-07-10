@@ -6,6 +6,7 @@ public class UIRayScript : MonoBehaviour
 	public GameObject AimObject;
 	public GameObject StartUpUI;
 	private StartUpScript UIScript;
+
 	
 	public float nextFire = 0.0f;
 	public float fireRate = 0.25f;
@@ -16,6 +17,7 @@ public class UIRayScript : MonoBehaviour
 	private float CreditBackButton = 0;
 	private float QuitButton = 0;
 	private float GameOnButton = 0;
+	private float UIHighScores = 0;
 	
 	//Colour Change Effect
 	public GameObject StartText;
@@ -110,7 +112,23 @@ public class UIRayScript : MonoBehaviour
 				}
 			}
 			
+			if (hitInfo.collider.CompareTag("UIHighScores"))
+			{
+				UIHighScores +=1;
+				if (UIHighScores >= 5)
+				{
+					Debug.Log("RESTART ACTIVATED");
+					Application.LoadLevel (Application.loadedLevel);
+					UIHighScores = 0;
+				}
+			}
+			
 			ResetOthers(hitInfo.collider.tag);
+			
+			if (hitInfo.collider.CompareTag("Alphabet"))
+			{
+				hitInfo.collider.gameObject.GetComponent<AlphaUI>().IncrementCounter();
+			}
 
 		}
 	}
