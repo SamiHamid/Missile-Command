@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private LevelData[] LData;
 
     // score variables
-    private float _playerScore;     // score the player actually has
+    [SerializeField] private float _playerScore;     // score the player actually has
     private float _levelScore;      // score gained at that level
 
 	//----------------------------------------------------------------------------------------------
@@ -186,19 +186,24 @@ public class GameManager : MonoBehaviour
         Destroy(GameObject.Find("GameOver(Clone)"));
 
         // show High Scores
-        Instantiate(_UIElements.ScoresUI, new Vector3(0.05f, 26.8f, 45.4f), Quaternion.identity);
-        // TODO: Edit ScoresUI fields to match the highscores and names
+		GameObject HighScoresUI = Instantiate(_UIElements.ScoresUI, new Vector3(0.05f, 26.8f, 45.4f), Quaternion.identity) as GameObject;
+		GetComponent<ScoreManager> ().UpdateScoresUI ();
+
         // TODO: Instantiate/put a Back Button to Application.LoadLevel(0);
 
         // check if the player score is a high score
         if (GetComponent<ScoreManager>().IsHighScore((int)_playerScore))
         {
+			Debug.Log ("NEW HIGH SCORE!");
             // enable input: show the letters | otherwise show only the scores (by default)   
-            GameObject.FindGameObjectWithTag("UIHighScores").transform.FindChild("Alphabet").gameObject.SetActive(true);
+			HighScoresUI.transform.FindChild("Alphabet").gameObject.SetActive(true);
 
             // TODO: Interaction of HighScores - Save the current score
+			GetComponent<ScoreManager>().HighLightNewScore((int)_playerScore);
         }
     }
+
+
 
 
     IEnumerator CleanUp()
