@@ -5,15 +5,16 @@ private var rb : Rigidbody;
 //var exhaust : GameObject;
 var exhaust : ParticleSystem;
 var force : float = 15;
+var impactPoint : GameObject;
 
 function Start () {
-	startPos.x = Random.Range(-75.0, 75);
-	startPos.y = 10;
-	startPos.z = Random.Range(-30, 115);
+	startPos.x = 0;
+	startPos.y = 0;
+	startPos.z = 150;
 	transform.position = startPos;
 	endPos.x = startPos.x + Random.Range(-10, 10);
 	endPos.y = Random.Range(10, 25);
-	endPos.z = startPos.z + Random.Range(-10, 10);
+	endPos.z = Random.Range(0, 100);
 	//endPos.y = 1000;
 	rb = GetComponent.<Rigidbody>();
 	//exhaust.SetActive (false);
@@ -25,35 +26,46 @@ function Update () {
 		
 		// move car Y-axis
 		if (transform.position.y < endPos.y) {
-			rb.AddRelativeForce(transform.up * force);
+			rb.AddForce(transform.up * force);
 			if (exhaust.isPlaying == false) {
 				exhaust.Play();
 			}
 		} else {
 			if (exhaust.isPlaying == true) {
 				exhaust.Stop();
-				rb.AddRelativeForce(transform.up * force * 0.5);
+				rb.AddForce(transform.up * force);
 			}
 		}
 		
 		// move car X-axis
 		if (transform.position.x > endPos.x) {
-			rb.AddForce(transform.right * -force * 0.1);
+			rb.AddForce(transform.right * -force);  // was *0.1
 		} else {
-			rb.AddForce(transform.right * force * 0.1);
+			rb.AddForce(transform.right * force);
 		}
 		
 		// move car Z-axis
 		if (transform.position.z > endPos.z) {
-			rb.AddForce(transform.forward * -force * 0.1);
+			rb.AddForce(transform.forward * -force);
 		} else {
-			rb.AddForce(transform.forward * force * 0.1);
+			rb.AddForce(transform.forward * force);
 		}
 	} else {
 		Debug.Log("flying car finds new endPos");
 		endPos.x = Random.Range(-75.0, 75);
-		endPos.y = Random.Range(5, 25);
-		endPos.z = Random.Range(-30,115);
+		endPos.y = Random.Range(10, 25);
+		endPos.z = Random.Range(0,100);
 	}
 	
+	if (transform.position.y < 5) {
+		rb.AddForce(transform.up * force);
+	}
+	
+}
+
+function OnCollisionEnter (collision: Collision) {
+	if (collision.transform.tag == "Player") {
+		Instantiate(impactPoint, transform.position, Quaternion.identity);
+		Destroy(gameObject);
+	}
 }
