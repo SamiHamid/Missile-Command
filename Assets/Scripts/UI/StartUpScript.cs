@@ -7,8 +7,8 @@ public class StartUpScript : MonoBehaviour {
 	private Animator anim;
 	private int UIInitializeCounter = 0;
 	public GameObject GUI;
-	private bool OVRHealthScreen;
 	private bool DisableMouseInput;
+	private bool DisableStart;
 	
 	// How To Menu 
 	public GameObject HowToMiddleObj;
@@ -64,19 +64,18 @@ public class StartUpScript : MonoBehaviour {
 		}
 		
 		// Game GUI Initialization
-		if (Input.GetMouseButtonDown(0) && DisableMouseInput == false)
+		if (Input.GetMouseButtonDown(0) && DisableStart == false)
 		{
-			if (OVRHealthScreen == true && DemoFire == false)
+			if (DemoFire == false)
 			{
 				UIInitialize();
-				DisableMouseInput = true;
+				DisableStart = true;
 			}
-			OVRHealthScreen = true;
-			
-			if (Input.GetMouseButtonDown(0) && DemoFire == true)
-			{
-				PlayerScriptHere.ShootMissileUI();
-			}
+		}
+		
+		if (Input.GetMouseButtonDown(0) && DemoFire == true)
+		{
+			PlayerScriptHere.ShootMissileUI();
 		}
 	}
 
@@ -93,8 +92,7 @@ public class StartUpScript : MonoBehaviour {
 		LeftScript.FadeIn ();
 		RightScript.FadeIn ();
 	    UIInitializeCounter = 2;
-	    DemoFire = true;
-	    DisableMouseInput = false;
+	    Invoke ("DemoFireTimer", 2);
 	    GetComponent<AudioSource>().Play();
 	}
 	
@@ -162,5 +160,10 @@ public class StartUpScript : MonoBehaviour {
 			GamePlane.GetComponent<AudioSource>().volume = 0.1f * i; 
 			yield return new WaitForSeconds(0.5f);
 		}
+	}
+	
+	void DemoFireTimer()
+	{
+		DemoFire = true;
 	}
 }

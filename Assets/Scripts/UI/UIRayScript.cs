@@ -38,6 +38,11 @@ public class UIRayScript : MonoBehaviour
 			RayCasting();
 			nextFire = Time.time + fireRate; 
 		}
+		
+		if (Input.GetButton("Cancel"))
+		{
+			Application.Quit();
+		}
 	}
 	
 	// UI RAYCASTING
@@ -59,35 +64,38 @@ public class UIRayScript : MonoBehaviour
 			
 			if (hitInfo.collider.CompareTag("UIStart"))
 			{
+				
 				StartButton +=1;
 				if (StartButton >= 5)
 				{
-					Debug.Log("START ACTIVATED");
 					UIScript.UIStart();
 					StartButton = 0;
 				}
+				
 			}
 			
 			if (hitInfo.collider.CompareTag("UICredits"))
 			{
+				
 				CreditButton +=1;
 				if (CreditButton >= 5)
 				{
-					Debug.Log("CREDITS ACTIVATED");
 					UIScript.UICredits();
 					CreditButton =0;
 				}
+				
 			}
 			
 			if (hitInfo.collider.CompareTag("UICreditsBack"))
 			{
+				
 				CreditBackButton+=1;
 				if (CreditBackButton >=5)
 				{
-					Debug.Log("BACK ACTIVATED");
 					UIScript.UICreditsBack();
 					CreditBackButton =0;
 				}
+				
 			}
 			
 			if (hitInfo.collider.CompareTag("UIQuit"))
@@ -95,21 +103,21 @@ public class UIRayScript : MonoBehaviour
 				QuitButton +=1;
 				if (QuitButton >= 5)
 				{
-					Debug.Log("QUIT ACTIVATED");
 					UIScript.UIQuit();
 					QuitButton = 0;
 				}
+				
 			}
 			
 			if (hitInfo.collider.CompareTag("UIGameOn"))
-			{
+			{				
 				GameOnButton +=1;
 				if (GameOnButton >= 5)
 				{
-					Debug.Log("GAMEON ACTIVATED");
 					UIScript.UIHowTo();
 					GameOnButton = 0;
 				}
+				
 			}
 			
 			if (hitInfo.collider.CompareTag("UIHighScores"))
@@ -117,10 +125,10 @@ public class UIRayScript : MonoBehaviour
 				UIHighScores +=1;
 				if (UIHighScores >= 5)
 				{
-					Debug.Log("RESTART ACTIVATED");
-					Application.LoadLevel (Application.loadedLevel);
 					UIHighScores = 0;
+					Application.LoadLevel (Application.loadedLevel);
 				}
+				
 			}
 			
 			ResetOthers(hitInfo.collider.tag);
