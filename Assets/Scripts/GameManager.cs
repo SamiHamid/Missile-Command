@@ -36,8 +36,6 @@ public class GameManager : MonoBehaviour
 	{
 	    ReadLevelData();
 	    UpdateLevelVariables(_currentLevel);
-	    
-		//Screen.showCursor = false;  // obsolete, check for a newer way to do it, should be pretty ez.
 	}
 
     private void ReadLevelData()

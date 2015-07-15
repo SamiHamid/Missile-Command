@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 public class EnemyMissileLauncher : MonoBehaviour {
  
     [SerializeField] private GameObject _projectile;
-    [SerializeField] private Transform _missileContainer;
     [SerializeField] private GameObject _houseContainer;
     [SerializeField] private float _shootingPeriod;
 
@@ -58,6 +57,11 @@ public class EnemyMissileLauncher : MonoBehaviour {
             _lastMissileLaunched = false;
         }
 
+		else if (_missileCount == 0 && GameManager.GameStarted && !_lastMissileLanded)
+		{
+			//Debug.Log("Last Missile Not Landed!");
+		}
+
         // this block can be optimized: implement callback function on collision 
         // to set this variable true, instead of checking it every frame
         if (_lastMissileLaunched)
@@ -89,7 +93,6 @@ public class EnemyMissileLauncher : MonoBehaviour {
         // Instantiate a projectile (missile) 
         float _firingAngle = Random.Range(_projectilePhysics.FiringAngleMin, _projectilePhysics.FiringAngleMax);
         GameObject missile = Instantiate(_projectile, transform.position, Quaternion.identity) as GameObject;
-        //missile.transform.parent = _missileContainer;   // stack missiles under launcher object
 
         // calculate initival velocity required to land the missile on target
         float Vi = Mathf.Sqrt(dist * Physics.gravity.magnitude / (Mathf.Sin(Mathf.Deg2Rad * _firingAngle * 2)));
@@ -109,7 +112,7 @@ public class EnemyMissileLauncher : MonoBehaviour {
         _missileCount--;
         _managers.UI.UpdateEnemyMissileUI(_missileCount);
 
-        if (MissileCount == 0) _lastMissileLaunched = true;
+		if (_missileCount == 0) _lastMissileLaunched = true;
 
     }
 

@@ -96,7 +96,7 @@ public class EnemyMissileScript : MonoBehaviour
         displacement *= distance;      // 1-3 meters away from the house
 
         // sharpnel spawn position          // add some height to sharpnel pos
-        Vector3 pos = HPos + displacement + new Vector3(0f, 2f, 0f);
+        // Vector3 pos = HPos + displacement + new Vector3(0f, 2f, 0f);
         //Instantiate(_impactPoint, pos, Quaternion.identity);
     }   // NOT USED ANYMORE
 

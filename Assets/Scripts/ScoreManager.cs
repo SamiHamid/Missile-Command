@@ -82,6 +82,7 @@ public class ScoreManager : MonoBehaviour
 
 		// Update Text Fields of ScoresUI
 		int index = 0;
+
 		foreach(Transform entry in _scoresUI.transform.FindChild("ScorePosition"))
 		{
 			entry.FindChild("ScoreText").GetComponent<TextMesh>().text = _scores[index].Score.ToString();
@@ -128,7 +129,7 @@ public class ScoreManager : MonoBehaviour
 					text.color = Color.white;
 				}
 
-				// break the loop
+				// break the loop after the score is found
 				_highScoreRow = entry;
 				break;
 			}

@@ -35,6 +35,8 @@ public class PlayerScript : MonoBehaviour
 	void Start () 
     {
 		Cursor.visible = false;
+
+		SetShooterObject ();
 	}
 	
 	void Update () 
@@ -50,6 +52,11 @@ public class PlayerScript : MonoBehaviour
 		}
 	}
 
+
+	void SetShooterObject()
+	{
+		_playerMissileShooter = GameObject.FindGameObjectsWithTag ("ShooterObject")[0].transform;
+	}
 
     public void ShootMissile()
     {

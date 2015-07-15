@@ -5,9 +5,7 @@ public class StartUpScript : MonoBehaviour {
 
 	// StartUp Menu
 	private Animator anim;
-	private int UIInitializeCounter = 0;
 	public GameObject GUI;
-	private bool DisableMouseInput;
 	private bool DisableStart;
 	
 	// How To Menu 
@@ -82,7 +80,6 @@ public class StartUpScript : MonoBehaviour {
 	public void UIInitialize()
 	{
 		anim.SetTrigger ("FadeIn");
-        UIInitializeCounter = 1;
     }
 
 	public void UIStart()
@@ -91,7 +88,6 @@ public class StartUpScript : MonoBehaviour {
 		MiddleScript.FadeIn ();
 		LeftScript.FadeIn ();
 		RightScript.FadeIn ();
-	    UIInitializeCounter = 2;
 	    Invoke ("DemoFireTimer", 2);
 	    GetComponent<AudioSource>().Play();
 	}
@@ -124,8 +120,6 @@ public class StartUpScript : MonoBehaviour {
 		Invoke ("GameOn", 8);
 		Invoke ("DeactivateParticleRecticle", 3.5f);
 		DemoFire = false;
-		DisableMouseInput = true;
-	    UIInitializeCounter = 3;
 		GetComponent<AudioSource>().Play();
 	}
 	

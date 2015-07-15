@@ -17,7 +17,7 @@ public class UIRayScript : MonoBehaviour
 	private float CreditBackButton = 0;
 	private float QuitButton = 0;
 	private float GameOnButton = 0;
-	private float UIHighScores = 0;
+	private float UIMainMenu = 0;
 		
 	//Colour Change Effect
 	public GameObject StartText;
@@ -65,29 +65,22 @@ public class UIRayScript : MonoBehaviour
 			
 			if (hitInfo.collider.CompareTag("UIStart"))
 			{
-				
-				
 				StartButton +=1;
 				if (StartButton >= 5)
 				{
 					UIScript.UIStart();
 					StartButton = 0;
-					
 				}				
 			}
 			
 			if (hitInfo.collider.CompareTag("UICredits"))
 			{
-				
-				
 				CreditButton +=1;
 				if (CreditButton >= 5)
 				{
 					UIScript.UICredits();
 					CreditButton =0;
-					
 				}
-				
 			}
 			
 			if (hitInfo.collider.CompareTag("UICreditsBack"))
@@ -133,14 +126,19 @@ public class UIRayScript : MonoBehaviour
 				
 			}
 			
-			if (hitInfo.collider.CompareTag("UIHighScores"))
+			if (hitInfo.collider.CompareTag("UIMainMenu"))
 			{
 				
 			
-				UIHighScores +=1;
-				if (UIHighScores >= 5)
+				UIMainMenu +=1;
+				if (UIMainMenu >= 5)
 				{
-					UIHighScores = 0;
+					UIMainMenu = 0;
+
+					// reset statics before game is loaded
+					GameManager.GameStarted = false;
+					gridMakerScript.InitializationStarted = false;
+
 					Application.LoadLevel (Application.loadedLevel);
 				}
 				
@@ -165,27 +163,39 @@ public class UIRayScript : MonoBehaviour
 			CreditBackButton = 0;
 			QuitButton = 0;
 			GameOnButton = 0;
+			UIMainMenu = 0;
 			break;
 		case "UICredits":
 			StartButton = 0;
 			CreditBackButton = 0;
 			QuitButton = 0;
 			GameOnButton = 0;
+			UIMainMenu = 0;
 			break;
 		case "UICreditsBack":
 			StartButton = 0;
 			CreditButton = 0;
 			QuitButton = 0;
 			GameOnButton = 0;
+			UIMainMenu = 0;
 			break;
 		case "UIQuit":
 			StartButton = 0;
 			CreditButton = 0;
 			CreditBackButton = 0;
 			GameOnButton = 0;
+			UIMainMenu = 0;
 			break;
 		case "UIGameOn":
 			StartButton = 0;
+			CreditButton = 0;
+			CreditBackButton = 0;
+			QuitButton = 0;
+			UIMainMenu = 0;
+			break;
+		case "UIMainMenu":
+			StartButton = 0;
+			GameOnButton = 0;
 			CreditButton = 0;
 			CreditBackButton = 0;
 			QuitButton = 0;
