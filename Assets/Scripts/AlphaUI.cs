@@ -4,6 +4,7 @@ using System.Collections;
 public class AlphaUI : MonoBehaviour 
 {
 	private int Counter;
+	public GameObject HighScore;
 	
 	[SerializeField] private int _lookThreshold;
 	
@@ -12,6 +13,7 @@ public class AlphaUI : MonoBehaviour
 	void Start () 
 	{
 		_scoreManager = GameObject.Find("Player").GetComponent<ScoreManager>();
+		
 	}
 	
 	void ResetOthers()
@@ -36,6 +38,8 @@ public class AlphaUI : MonoBehaviour
 		{
 			//Debug.Log("TYPE " + GetComponent<TextMesh>().text);
 			
+			HighScore.GetComponent<AudioSource>().Play();
+					
 			// Type a letter
 			if(GetComponent<TextMesh>().text.Length == 1)
 			{

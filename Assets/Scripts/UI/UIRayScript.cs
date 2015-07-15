@@ -39,7 +39,7 @@ public class UIRayScript : MonoBehaviour
 			nextFire = Time.time + fireRate; 
 		}
 		
-		if (Input.GetButton("Cancel"))
+		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
 		}
@@ -104,6 +104,7 @@ public class UIRayScript : MonoBehaviour
 				if (QuitButton >= 5)
 				{
 					UIScript.UIQuit();
+					Debug.Log("QUITING");
 					QuitButton = 0;
 				}
 				
