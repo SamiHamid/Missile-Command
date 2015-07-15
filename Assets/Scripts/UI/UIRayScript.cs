@@ -18,7 +18,7 @@ public class UIRayScript : MonoBehaviour
 	private float QuitButton = 0;
 	private float GameOnButton = 0;
 	private float UIHighScores = 0;
-	
+		
 	//Colour Change Effect
 	public GameObject StartText;
 	public GameObject CreditsText;
@@ -43,6 +43,7 @@ public class UIRayScript : MonoBehaviour
 		{
 			Application.Quit();
 		}
+	
 	}
 	
 	// UI RAYCASTING
@@ -65,23 +66,26 @@ public class UIRayScript : MonoBehaviour
 			if (hitInfo.collider.CompareTag("UIStart"))
 			{
 				
+				
 				StartButton +=1;
 				if (StartButton >= 5)
 				{
 					UIScript.UIStart();
 					StartButton = 0;
-				}
-				
+					
+				}				
 			}
 			
 			if (hitInfo.collider.CompareTag("UICredits"))
 			{
+				
 				
 				CreditButton +=1;
 				if (CreditButton >= 5)
 				{
 					UIScript.UICredits();
 					CreditButton =0;
+					
 				}
 				
 			}
@@ -89,40 +93,50 @@ public class UIRayScript : MonoBehaviour
 			if (hitInfo.collider.CompareTag("UICreditsBack"))
 			{
 				
+				
 				CreditBackButton+=1;
 				if (CreditBackButton >=5)
 				{
 					UIScript.UICreditsBack();
 					CreditBackButton =0;
+				
 				}
 				
 			}
 			
 			if (hitInfo.collider.CompareTag("UIQuit"))
 			{
+	
+			
 				QuitButton +=1;
 				if (QuitButton >= 5)
 				{
 					UIScript.UIQuit();
 					Debug.Log("QUITING");
 					QuitButton = 0;
+					
 				}
 				
 			}
 			
 			if (hitInfo.collider.CompareTag("UIGameOn"))
 			{				
+				
+			
 				GameOnButton +=1;
 				if (GameOnButton >= 5)
 				{
 					UIScript.UIHowTo();
 					GameOnButton = 0;
+					
 				}
 				
 			}
 			
 			if (hitInfo.collider.CompareTag("UIHighScores"))
 			{
+				
+			
 				UIHighScores +=1;
 				if (UIHighScores >= 5)
 				{
