@@ -43,6 +43,11 @@ public class PlayerScript : MonoBehaviour
 	    {
 	        ShootMissile();
 	    }
+	    
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
 	}
 
 

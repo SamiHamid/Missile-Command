@@ -6,9 +6,13 @@ public class HowtoScript : MonoBehaviour {
 	private Animator anim;
 	
 	//Change Text
-	public TextMesh Text;
+
+	public TextMesh FirstText;
+	public TextMesh SecondText;
+	public TextMesh ThirdText;
 	public GameObject MissileUI;
 	public bool BoolFlip = true;
+	private bool CanTextChange = false;
 	
 	void Awake () 
 	{
@@ -18,11 +22,14 @@ public class HowtoScript : MonoBehaviour {
 	public void FadeIn()
 	{
 		anim.SetTrigger ("FadeIn");
+		CanTextChange = true;
+		Debug.Log("IM ACTIVE");
 	}
 	
 	public void FadeOut()
 	{
 		anim.SetTrigger ("FadeOut");
+		CanTextChange = false;
 	}
 	
 	void Update()
@@ -31,17 +38,45 @@ public class HowtoScript : MonoBehaviour {
 		{
 			if (BoolFlip == true)
 			{
-			ChangeText();
+			ChangeThirdText();
 			Debug.Log("IM BEING CALLED");
 			BoolFlip = false;
 			}
 		}
 		
+		if (Input.GetMouseButtonDown(0))
+		{
+			if (CanTextChange == true)
+			{
+			ChangeFirstTText();
+			}
+		}
+		
+		if (Input.GetMouseButtonDown(1))
+		{
+			if (CanTextChange == true)
+			{
+			ChangeSecondText();
+			}
+		}
+		
 	}
 	
-	public void ChangeText()
+	public void ChangeFirstTText()
 	{
-		Text.text = ("You Are Ready!");
-		Text.color = Color.green;
+		FirstText.text = ("LEFT MOUSE BUTTON = FIRE - OK");
+		FirstText.color = Color.green;
+	}
+	
+	public void ChangeSecondText()
+	{
+		SecondText.text = ("RIGHT MOUSE BUTTON = DETONATE - OK");
+		SecondText.color = Color.green;
+	}
+	
+	public void ChangeThirdText()
+	{
+		ThirdText.text = ("USER IS READY TO PROCEED TO GAMES");
+		ThirdText.color = Color.green;
 	}
 }
