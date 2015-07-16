@@ -12,6 +12,12 @@ This project was a prototype and the first of a portfolio of work made by a smal
  - Launch your missile with Left Mouse Button 
  - Destroy enemy missiles with detonating your own missile with Right Mouse Button 
 
+# Screenshots
+
+
+ ![Screenshot2](http://i.imgur.com/5QhIwWB.jpg)
+ ![Screenshot3](http://i.imgur.com/dMwKXbs.jpg) 
+
 # Credits
  - [Volkan Ilbeyli](https://vilbeyli.github.io/about/) - **Programmer** 
  - Andrew McCormick - **Game Design & Animations**
