@@ -58,7 +58,7 @@ public class StartUpScript : MonoBehaviour {
 		if (Input.GetButtonDown("Jump"))
 		{
 			GameOn();
-			GUI.SetActive(false);
+
 		}
 		
 		// Game GUI Initialization
@@ -132,6 +132,7 @@ public class StartUpScript : MonoBehaviour {
             GamePlane.SetActive(true);
             GridScript.GameBegin();
 		    EnvScript.Activate();
+			GUI.SetActive(false);
 		}
 	}
 
