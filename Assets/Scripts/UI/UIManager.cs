@@ -14,12 +14,12 @@ public class UIManager : MonoBehaviour
 
     public void UpdateEnemyMissileUI(int count)
     {
-        EnemyMissileCountText.text = "ENEMY MISSILES REMAINING: " + count;
+        EnemyMissileCountText.text = "ENEMY MISSILES: " + count;
     }
 
     public void UpdatePlayerMissileUI(int count)
     {
-        PlayerMissileCountText.text = "PLAYER MISSILES REMAINING: " + count;
+        PlayerMissileCountText.text = "PLAYER MISSILES: " + count;
     }
 
     public void UpdateLevelText(int lvl)
