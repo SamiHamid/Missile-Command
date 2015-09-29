@@ -55,11 +55,11 @@ public class StartUpScript : MonoBehaviour {
 	void Update () 
 	{
 		//SKIP STARTUP MENU
-		if (Input.GetButtonDown("Jump"))
-		{
-			GameOn();
+		//if (Input.GetButtonDown("Jump"))
+		//{
+		//	GameOn();
 
-		}
+		//}
 		
 		// Game GUI Initialization
 		if (Input.GetMouseButtonDown(0) && DisableStart == false)
